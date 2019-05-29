@@ -152,9 +152,9 @@ class ControllerPaymentWasa extends Controller {
             ),
             'currency' => 'SEK',
           ),
-          'request_domain' => $this->config->get('config_url'),
-          'confirmation_callback_url' => $this->config->get('config_url'),
-          'ping_url' => $this->config->get('config_url')
+          'request_domain' => $this->config->get('config_ssl'),
+          'confirmation_callback_url' => $this->config->get('config_ssl'),
+          'ping_url' => $this->config->get('config_ssl')
         );
 
 		$currency = $this->session->data['currency'];
