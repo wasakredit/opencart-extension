@@ -5,9 +5,9 @@
 3. Prepare FTP access to your eshop
 4. Upload the content of /upload directory to the root of your shop via FTP
 5. Now you need to login to your shop administration and enable Wasa payment via Extensions -> payments
-![Extensions picture](extensions.png)
+![Extensions picture](extensions_payments.png)
 6. When module is installed and you are in its administration, you can see following input fields
-![Input fields picture](inputfields.png)
+![Input fields picture](inputfields_edit_wasa.png)
    1. Client ID - Please contact Wasa Kredit company for this information
    2. Client secret key - Please contact Wasa Kredit company for this information
    3. Environment - In case you want to create test order with Wasa payment first, in other cases select **Live**
