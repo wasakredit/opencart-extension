@@ -1,8 +1,5 @@
 If you want to show wasa payment widget in product page, You need to follow instructions below. 
 
-You can also contact me via email jaroslav@nalezny.cz with FTP access and i will modify your theme files for you.
-
-
 EDIT : /catalog/view/theme/default/template/product/product.tpl
 place <?php echo $wasa_widget ?> above  <div id="product">
 
