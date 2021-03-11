@@ -13,3 +13,10 @@
    3. Environment - In case you want to create test order with Wasa payment first, in other cases select **Live**
    4. Status - Enable Wasa payment in opencart
    5. Order status - Select which status should be set for new order in Wasa payment. I suggest **Processing**
+
+## Monthly Price Widget
+
+In order to show monthly price widget read the following guides depending on version of OpenCart:
+- [wasa\_2.3.x/upload/readme.txt] (wasa_2.3.x/upload/readme.txt)
+- [wasa\_2.x.x/upload/readme.txt] (wasa_2.x.x/upload/readme.txt)
+- [wasa\_3.x.x/upload/readme.txt] (wasa_3.x.x/upload/readme.txt)
