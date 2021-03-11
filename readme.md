@@ -16,7 +16,7 @@
 
 ## Monthly Price Widget
 
-In order to show monthly price widget read the following guides depending on your version of OpenCart:
+Read the following guides on how to display monthly price widget depending on your installed version of OpenCart:
 - [wasa\_2.3.x/upload/readme.txt](wasa_2.3.x/upload/readme.txt)
 - [wasa\_2.x.x/upload/readme.txt](wasa_2.x.x/upload/readme.txt)
 - [wasa\_3.x.x/upload/readme.txt](wasa_3.x.x/upload/readme.txt)
