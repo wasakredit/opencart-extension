@@ -19,8 +19,7 @@ $_['tab_secret_test']	= 'Test Secret';
 $_['tab_secret_live']	= 'Live Secret';
 
 // Entry
-$_['entry_environment'] = 'Environment';
-$_['entry_environment_help'] = 'Please choose an environment. Test for Testing (Sandbox) account and Live for Production account';
+$_['entry_test_mode'] = 'Test More';
 
 $_['entry_status'] = 'Status';
 

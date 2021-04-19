@@ -51,22 +51,17 @@
               </div>
 
               <div class="form-group">
-                <label class="col-sm-2 control-label" for="input-wasa-environment">
-                  <span data-toggle="tooltip">
-                    <?php echo $entry_environment; ?>  
-                  </span>
+                <label class="col-sm-2 control-label" for="input-wasa-test-mode">
+                  <?php echo $entry_test_mode; ?>
                 </label>
                 <div class="col-sm-10">
-                  <select name="wasa_environment" id="input-wasa-environment" class="form-control">
-                    <?php if ($wasa_environment == 'false') { ?>
-                    <option value="false" selected="selected"><?php echo $text_live; ?></option>
+                  <select name="wasa_test_mode" id="input-wasa-test-mode" class="form-control">
+                    <?php if ($wasa_test_mode) { ?>
+                    <option value="1" selected="selected"><?php echo $text_enabled; ?></option>
+                    <option value="0"><?php echo $text_disabled; ?></option>
                     <?php } else { ?>
-                    <option value="false"><?php echo $text_live; ?></option>
-                    <?php } ?>
-                    <?php if ($wasa_environment == 'true') { ?>
-                    <option value="true" selected="selected"><?php echo $text_test; ?></option>
-                    <?php } else { ?>
-                    <option value="true"><?php echo $text_test; ?></option>
+                    <option value="1"><?php echo $text_enabled; ?></option>
+                    <option value="0" selected="selected"><?php echo $text_disabled; ?></option>
                     <?php } ?>
                   </select>
                 </div>

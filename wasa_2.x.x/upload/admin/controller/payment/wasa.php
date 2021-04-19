@@ -58,7 +58,7 @@ class ControllerPaymentWasa extends Controller {
 		$data['entry_country']         = $this->language->get('entry_country');
 		$data['entry_merchant_number'] = $this->language->get('entry_merchant_number');
 		$data['entry_secret_key']      = $this->language->get('entry_secret_key');
-		$data['entry_environment']     = $this->language->get('entry_environment');
+		$data['entry_test_mode']       = $this->language->get('entry_test_mode');
 		$data['entry_order_status']    = $this->language->get('entry_order_status');
 		$data['entry_status']          = $this->language->get('entry_status');
 		$data['entry_logging']         = $this->language->get('entry_logging');
@@ -82,12 +82,12 @@ class ControllerPaymentWasa extends Controller {
 
 		$data['cancel'] = $this->url->link('extension/payment', 'token=' . $this->session->data['token'] . '&type=payment', true);
 
-		if (isset($this->request->post['wasa_environment'])) {
-			$data['wasa_environment'] = $this->request->post['wasa_environment'];
-		} elseif ($this->config->has('wasa_environment')) {
-			$data['wasa_environment'] = $this->config->get('wasa_environment');
+		if (isset($this->request->post['wasa_test_mode'])) {
+			$data['wasa_test_mode'] = $this->request->post['wasa_test_mode'];
+		} elseif ($this->config->has('wasa_test_mode')) {
+			$data['wasa_test_mode'] = $this->config->get('wasa_test_mode');
 		} else {
-			$data['wasa_environment'] = 'test';
+			$data['wasa_test_mode'] = 1;
 		}
 
 		if (isset($this->request->post['wasa_currency'])) {

@@ -29,17 +29,17 @@ class ModelExtensionPaymentWasa extends Model {
 	public function getWidget($price) {
 		$data['publishable_key'] = $this->config->get('payment_wasa_client_id');
 		$data['wasa_secret_key'] = $this->config->get('payment_wasa_secret_key');
-		$data['wasa_environment'] = $this->config->get('payment_wasa_environment');
-		$wasa_environment  = false;
-		if ($data['wasa_environment'] == 'true') {
-			$wasa_environment  = true;
+		$data['wasa_test_mode'] = $this->config->get('payment_wasa_test_mode');
+		$wasa_test_mode  = false;
+		if ($data['wasa_test_mode']) {
+			$wasa_test_mode  = true;
 		}
 
         $this->_client = new Client(
             $data['publishable_key'],
             $data['wasa_secret_key'],
-            $wasa_environment
-        ); 
+            $wasa_test_mode
+        );
 
 		$response = $this->_client->get_monthly_cost_widget($price);
 

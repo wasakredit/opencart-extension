@@ -17,17 +17,17 @@ class ControllerExtensionPaymentWasa extends Controller {
 
 		$data['publishable_key'] = $this->config->get('wasa_client_id');
 		$data['wasa_secret_key'] = $this->config->get('wasa_secret_key');
-		$data['wasa_environment'] = $this->config->get('wasa_environment');
-		$wasa_environment  = false;
-		if ($data['wasa_environment'] == 'true') {
-			$wasa_environment  = true;
+		$data['wasa_test_mode'] = $this->config->get('wasa_test_mode');
+		$wasa_test_mode  = false;
+		if ($data['wasa_test_mode']) {
+			$wasa_test_mode  = true;
 		}
 
         $this->_client = new Client(
             $data['publishable_key'],
             $data['wasa_secret_key'],
-            $wasa_environment
-        ); 
+            $wasa_test_mode
+        );
 
         $customer = $this->model_account_customer->getCustomer($this->customer->getId());
 
@@ -174,7 +174,7 @@ class ControllerExtensionPaymentWasa extends Controller {
 		if (isset($error) && $error == true) {
 			$data['error'] = $error_message;
 		} else {
-			$data['response'] = $response->data;			
+			$data['response'] = $response->data;
 		}
 
 		$data['order_reference_id'] = $this->session->data['order_id'];
@@ -195,13 +195,13 @@ class ControllerExtensionPaymentWasa extends Controller {
             if (!empty($id_wasakredit)) {
                 $message = 'Wasa payment ID: '.$id_wasakredit;
                 $this->model_checkout_order->addOrderHistory($this->session->data['order_id'], $this->config->get('wasa_order_status_id'), $message, false);
-                $json['processed'] = true;  
+                $json['processed'] = true;
             } else {
                 $json['processed'] = false;
             }
 
             $this->response->addHeader('Content-Type: application/json');
-            $this->response->setOutput(json_encode($json));      
+            $this->response->setOutput(json_encode($json));
         }
 	}
 }

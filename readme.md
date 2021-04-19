@@ -10,7 +10,7 @@
 ![Input fields picture](inputfields_edit_wasa.png)
    1. Client ID - Please contact Wasa Kredit company for this information
    2. Client secret key - Please contact Wasa Kredit company for this information
-   3. Environment - In case you want to create test order with Wasa payment first, in other cases select **Live**
+   3. Test mode - In case you want to create test order with Wasa payment first
    4. Status - Enable Wasa payment in opencart
    5. Order status - Select which status should be set for new order in Wasa payment. I suggest **Processing**
 
