@@ -122,8 +122,10 @@ class ControllerExtensionPaymentWasa extends Controller {
 
 		if (isset($this->request->post['payment_wasa_status'])) {
 			$data['payment_wasa_status'] = $this->request->post['payment_wasa_status'];
-		} elseif ($this->config->has('wasa_status')) {
+		} elseif ($this->config->has('payment_wasa_status')) {
 			$data['payment_wasa_status'] = $this->config->get('payment_wasa_status');
+		} else {
+			$data['payment_wasa_status'] = 1;
 		}
 
 		if (isset($this->error['warning'])) {
