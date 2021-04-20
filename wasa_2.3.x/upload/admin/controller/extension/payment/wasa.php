@@ -76,7 +76,7 @@ class ControllerExtensionPaymentWasa extends Controller {
 
 		$data['button_save']           = $this->language->get('button_save');
 		$data['button_cancel']         = $this->language->get('button_cancel');
-		$data['currencies']			   = ['sek'];
+		$data['currencies']			   = ['SEK'];
 
 		$data['action'] = $this->url->link('extension/payment/wasa', 'token=' . $this->session->data['token'], true);
 
@@ -95,7 +95,7 @@ class ControllerExtensionPaymentWasa extends Controller {
 		} elseif ($this->config->has('wasa_currency')) {
 			$data['wasa_currency'] = $this->config->get('wasa_currency');
 		} else {
-			$data['wasa_currency'] = 'usd';
+			$data['wasa_currency'] = 'SEK';
 		}
 
 
