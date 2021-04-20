@@ -19,7 +19,7 @@ class ControllerPaymentWasa extends Controller {
 		$data['wasa_secret_key'] = $this->config->get('wasa_secret_key');
 		$data['wasa_test_mode'] = $this->config->get('wasa_test_mode');
 		$wasa_test_mode  = false;
-		if ($data['wasa_test_mode'] == 'true') {
+		if ($data['wasa_test_mode']) {
 			$wasa_test_mode  = true;
 		}
 
