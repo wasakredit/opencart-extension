@@ -157,7 +157,7 @@ class ControllerPaymentWasa extends Controller {
 		if ($this->user->hasPermission('modify', 'extension/payment')) {
 			$this->load->model('payment/wasa');
 
-			$this->model_extension_payment_wasa->install();
+			$this->model_payment_wasa->install();
 		}
 	}
 
@@ -165,7 +165,7 @@ class ControllerPaymentWasa extends Controller {
 		if ($this->user->hasPermission('modify', 'extension/payment')) {
 			$this->load->model('payment/wasa');
 
-			$this->model_extension_payment_wasa->uninstall();
+			$this->model_payment_wasa->uninstall();
 		}
 	}
 
