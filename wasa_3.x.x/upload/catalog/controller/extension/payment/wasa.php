@@ -194,7 +194,7 @@ class ControllerExtensionPaymentWasa extends Controller {
             $id_wasakredit = $this->request->post['id_wasakredit'];
             if (!empty($id_wasakredit)) {
                 $message = 'Wasa payment ID: '.$id_wasakredit;
-                $this->model_checkout_order->addOrderHistory($this->session->data['order_id'], $this->config->get('wasa_order_status_id'), $message, false);
+                $this->model_checkout_order->addOrderHistory($this->session->data['order_id'], $this->config->get('payment_wasa_order_status_id'), $message, false);
                 $json['processed'] = true;
             } else {
                 $json['processed'] = false;
