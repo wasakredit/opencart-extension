@@ -37,14 +37,14 @@
 		    <div class="tab-pane active" id="tab-settings">
 
               <div class="form-group">
-                  <label class="col-sm-2 control-label" for="input-wasa_client_id">Client ID</label>
+                  <label class="col-sm-2 control-label" for="input-wasa_client_id"><?php echo $entry_client_id; ?></label>
                   <div class="col-sm-10">
                   <input type="text" name="wasa_client_id" value="<?php echo $wasa_client_id; ?>" id="input-wasa_client_id" class="form-control" />
                   </div>
               </div>
 
               <div class="form-group">
-                  <label class="col-sm-2 control-label" for="input-wasa_secret_key">Client secret key</label>
+                  <label class="col-sm-2 control-label" for="input-wasa_secret_key"><?php echo $entry_secret_key; ?></label>
                   <div class="col-sm-10">
                   <input type="text" name="wasa_secret_key" value="<?php echo $wasa_secret_key; ?>" id="input-wasa_secret_key" class="form-control" />
                   </div>
