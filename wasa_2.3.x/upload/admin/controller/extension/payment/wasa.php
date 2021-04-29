@@ -39,44 +39,23 @@ class ControllerExtensionPaymentWasa extends Controller {
 			'href' => $this->url->link('extension/payment/wasa', 'token=' . $this->session->data['token'], true)
 		);
 
-		$data['heading_title']         = $this->language->get('heading_title');
+        $data['heading_title']      = $this->language->get('heading_title');
 
-		$data['tab_settings']          = $this->language->get('tab_settings');
+        $data['tab_settings']       = $this->language->get('tab_settings');
 
-		$data['text_payment']          = $this->language->get('text_payment');
-		$data['text_edit']             = $this->language->get('text_edit');
-		$data['text_live']             = $this->language->get('text_live');
-		$data['text_test']             = $this->language->get('text_test');
-		$data['text_enabled']          = $this->language->get('text_enabled');
-		$data['text_disabled']         = $this->language->get('text_disabled');
-		$data['text_other']            = $this->language->get('text_other');
+        $data['text_edit']          = $this->language->get('text_edit');
+        $data['text_enabled']       = $this->language->get('text_enabled');
+        $data['text_disabled']      = $this->language->get('text_disabled');
 
-		$data['entry_email_address']   = $this->language->get('entry_email_address');
-		$data['entry_password']        = $this->language->get('entry_password');
-		$data['entry_currency']        = $this->language->get('entry_currency');
-		$data['entry_warehouse']       = $this->language->get('entry_warehouse');
-		$data['entry_country']         = $this->language->get('entry_country');
-		$data['entry_merchant_number'] = $this->language->get('entry_merchant_number');
-		$data['entry_secret_key']      = $this->language->get('entry_secret_key');
-		$data['entry_test_mode']       = $this->language->get('entry_test_mode');
-		$data['entry_order_status']    = $this->language->get('entry_order_status');
-		$data['entry_status']          = $this->language->get('entry_status');
-		$data['entry_logging']         = $this->language->get('entry_logging');
-		$data['entry_sort_order']      = $this->language->get('entry_sort_order');
-		$data['entry_api_key']         = $this->language->get('entry_api_key');
-		$data['entry_card']            = $this->language->get('entry_card');
+        $data['entry_client_id']    = $this->language->get('entry_client_id');
+        $data['entry_secret_key']   = $this->language->get('entry_secret_key');
+        $data['entry_test_mode']    = $this->language->get('entry_test_mode');
+        $data['entry_order_status'] = $this->language->get('entry_order_status');
+        $data['entry_status']       = $this->language->get('entry_status');
 
-		$data['help_email_address']    = $this->language->get('help_email_address');
-		$data['help_password']         = $this->language->get('help_password');
-		$data['help_currency']         = $this->language->get('help_currency');
-		$data['help_test']             = $this->language->get('help_test');
-		$data['help_secret_key']       = $this->language->get('help_secret_key');
-		$data['help_order_status']     = $this->language->get('help_order_status');
-		$data['help_logging']          = $this->language->get('help_logging');
-
-		$data['button_save']           = $this->language->get('button_save');
-		$data['button_cancel']         = $this->language->get('button_cancel');
-		$data['currencies']			   = ['SEK'];
+        $data['button_save']        = $this->language->get('button_save');
+        $data['button_cancel']      = $this->language->get('button_cancel');
+        $data['currencies']         = ['SEK'];
 
 		$data['action'] = $this->url->link('extension/payment/wasa', 'token=' . $this->session->data['token'], true);
 
