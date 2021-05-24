@@ -1,22 +1,46 @@
-# Wasa Kredit Payment Opencart Installation Guide
+# Wasa Kredit for OpenCart v2.0
+This is a payment extension for OpenCart 2.3.0.0 - 2.3.0.2.
 
-1. Download corresponding version from <https://www.opencart.com/index.php?route=marketplace/extension/info&extension_id=36742>
-2. Extract content of the zip file
-3. Prepare FTP access to your eshop
-4. Upload the content of /upload directory to the root of your shop via FTP
-5. Now you need to login to your shop administration and enable Wasa payment via Extensions -> payments
-![Extensions picture](extensions_payments.png)
-6. When module is installed and you are in its administration, you can see following input fields
-![Input fields picture](inputfields_edit_wasa.png)
-   1. Client ID - Please contact Wasa Kredit company for this information
-   2. Client secret key - Please contact Wasa Kredit company for this information
-   3. Test mode - In case you want to create test order with Wasa payment first
-   4. Status - Enable Wasa payment in opencart
-   5. Order status - Select which status should be set for new order in Wasa payment. I suggest **Processing**
+Please note that this version of the extension is no longer updated. We recommend that you upgrade to a newer version of OpenCart and this extension.
+
+## Installation Guide
+Before installing the extension, make sure that there is a backup web store!
+
+1. Download the extension
+2. Extract the content form the ZIP file
+3. Upload the content of the upload folder to the root of your web store
+4. Log in as an administrator and navigate to Extensions -> Payments
+5. Click on the install button for the Wasa Kredit extension
+6. Click on the edit button for the Wasa Kredit extension
+7. Enter your Client ID and Secret key
+8. Select default order status for new orders
+9. Save!
 
 ## Monthly Price Widget
+To display our monthly cost widget on your product page, you will need to manually edit the product page template:
 
-Read the following guides on how to display monthly price widget depending on your installed version of OpenCart:
-- [wasa\_2.3.x/upload/readme.txt](wasa_2.3.x/upload/readme.txt)
-- [wasa\_2.x.x/upload/readme.txt](wasa_2.x.x/upload/readme.txt)
-- [wasa\_3.x.x/upload/readme.txt](wasa_3.x.x/upload/readme.txt)
+### /catalog/view/theme/default/template/product/product.tpl
+Find the follow element:
+```
+<div id="product">
+```
+
+Insert this before the previous	element:
+```
+<?php echo $wasa_widget ?>
+```
+
+### /catalog/controller/product/product.php
+Find this code:
+```
+if ($product_info) {
+```
+
+Below that line, enter this code:
+```
+$this->load->model('payment/wasa');
+
+$wasa_price = $this->currency->format($product_info['price'], $this->session->data['currency'], false, false);
+
+$data['wasa_widget'] = $this->model_payment_wasa->getWidget($wasa_price);
+```
