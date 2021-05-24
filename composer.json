@@ -1,0 +1,16 @@
+{
+    "name": "wasa/opencart-extension",
+    "description": "Payment extension for OpenCart",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/wasakredit/php-checkout-sdk.git"
+        }
+    ],
+    "require": {
+        "wasa/client-php-sdk": "dev-master#v3.0"
+    },
+    "config": {
+        "vendor-dir": "upload/system/library/wasa/"
+    }
+}
