@@ -1,5 +1,10 @@
 <div class="row">
     <div class="col-md-12">
+        {% if test_mode %}
+            <div class="alert alert-success">
+                <i class="fa fa-info-circle"></i> {{ text_test_mode }}
+            </div>
+        {% endif %}
         {% if error %}
             <div class="alert alert-warning">
                 <i class="fa fa-check-circle"></i> {{ error }}
@@ -7,27 +12,34 @@
         {% else %}
             {{ response }}
             <script>
-                window.wasaCheckout.init();
-            </script>
-
-            <script>
                 var orderReferences = [
-                    { key: "partner_checkout_id", value: "{{ order_reference_id }}" },
-                    { key: "partner_reserved_order_number", value: "{{ order_reference_id }}" }
+                    { key: "partner_checkout_id", value: "{{ order_id }}" },
+                    { key: "partner_reserved_order_number", value: "{{ order_id }}" }
                 ];
-
-                var redirect = '{{ redirect }}';
-                var order_reference_id = '{{ order_reference_id }}';
 
                 var options = {
                     onComplete: function(orderReferences){
-                        updateWasa();
+                        $.ajax({
+                            type: "POST",
+                            url: '{{ url_confirm }}',
+                            data: {
+                                id_wasakredit: id_wasakredit,
+                                option: 'checkout'
+                            },
+                            success: function(response) {
+                                if (response && response['redirect']) {
+                                    window.location.href = response['redirect'];
+                                } else {
+                                    window.location.href = '{{ url_checkout }}';
+                                }
+                            }
+                        });
                     },
                     onRedirect: function(orderReferences){
-                        createOrder();
+                        window.location.href = '{{ url_checkout }}';
                     },
                     onCancel: function(orderReferences){
-                        window.location.href = 'index.php?route=checkout/checkout';
+                        window.location.href = '{{ url_checkout }}';
                     }
                 };
 
@@ -38,23 +50,7 @@
                 }, 1000);
 
                 function updateWasa(){
-                    $.ajax({
-                        type: "POST",
-                        url: '{{ ajax }}',
-                        data: {
-                            id_wasakredit: id_wasakredit,
-                            option: 'checkout'
-                        },
-                        success: function(response) {
-                            if (response) {
-                                if (response['processed'] == true) {
-                                    createOrder();
-                                } else {
-                                    window.location.href = 'index.php?route=checkout/checkout';
-                                }
-                            }
-                        }
-                    });
+
                     return true;
                 }
 
