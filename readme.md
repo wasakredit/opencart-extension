@@ -1,4 +1,4 @@
-# Wasa Kredit for OpenCart v3+
+# Wasa Kredit for OpenCart v3.0+
 This is a payment extension for OpenCart 3.0.0.0 - 3.0.3.7.
 
 ## Installation Guide
@@ -13,6 +13,17 @@ Before installing the extension, make sure that there is a backup of web store!
 7. Enter your Client ID and Secret key
 8. Select default order status for new orders
 9. Save!
+
+## Extension for OpenCart 2.0 and 2.3
+Our extensions for OpenCart 2.0 and 2.3 has been moved to separate branches and has been marked as legacy.
+Please note that we no longer actively update these versions, we recommend that you update to a newer version of OpenCart.
+However, we are still fixing bugs caused by the extension.
+
+Extension for OpenCart 2.0 can be found here:\
+https://github.com/wasakredit/opencart-extension/tree/opencart-v2-0
+
+Extension for OpenCart 2.3 can be found here:\
+https://github.com/wasakredit/opencart-extension/tree/opencart-v2-3
 
 ## Monthly Price Widget
 To display our monthly cost widget on your product page, you will need to manually edit the product page template:
