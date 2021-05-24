@@ -1,13 +1,17 @@
 <?php
-class ControllerExtensionPaymentWasa extends Controller {
+
+class ControllerExtensionPaymentWasa extends Controller
+{
     private $error = array();
 
-    public function index() {
+    public function index()
+    {
         $this->load->language('extension/payment/wasa');
 
         $this->document->setTitle($this->language->get('heading_title'));
 
         $this->load->model('setting/setting');
+        $this->load->model('localisation/order_status');
 
         if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
             $this->model_setting_setting->editSetting('payment_wasa', $this->request->post);
@@ -16,8 +20,6 @@ class ControllerExtensionPaymentWasa extends Controller {
 
             $this->response->redirect($this->url->link('extension/payment/wasa', 'user_token=' . $this->session->data['user_token'] . '&type=payment', true));
         }
-
-        $this->load->model('localisation/order_status');
 
         $data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 
@@ -78,7 +80,6 @@ class ControllerExtensionPaymentWasa extends Controller {
         $data['currencies']            = ['SEK'];
 
         $data['action'] = $this->url->link('extension/payment/wasa', 'user_token=' . $this->session->data['user_token'], true);
-
         $data['cancel'] = $this->url->link('extension/extension', 'user_token=' . $this->session->data['user_token'] . '&type=payment', true);
 
         if (isset($this->request->post['payment_wasa_test_mode'])) {
@@ -96,7 +97,6 @@ class ControllerExtensionPaymentWasa extends Controller {
         } else {
             $data['payment_wasa_currency'] = 'SEK';
         }
-
 
         if (isset($this->request->post['payment_wasa_client_id'])) {
             $data['payment_wasa_client_id'] = $this->request->post['payment_wasa_client_id'];
@@ -142,9 +142,7 @@ class ControllerExtensionPaymentWasa extends Controller {
             $data['success'] = '';
         }
 
-
         $data['user_token'] = $this->session->data['user_token'];
-
         $data['header'] = $this->load->controller('common/header');
         $data['column_left'] = $this->load->controller('common/column_left');
         $data['footer'] = $this->load->controller('common/footer');
@@ -152,7 +150,8 @@ class ControllerExtensionPaymentWasa extends Controller {
         $this->response->setOutput($this->load->view('extension/payment/wasa', $data));
     }
 
-    public function install() {
+    public function install()
+    {
         if ($this->user->hasPermission('modify', 'extension/extension')) {
             $this->load->model('extension/payment/wasa');
 
@@ -160,7 +159,8 @@ class ControllerExtensionPaymentWasa extends Controller {
         }
     }
 
-    public function uninstall() {
+    public function uninstall()
+    {
         if ($this->user->hasPermission('modify', 'extension/extension')) {
             $this->load->model('extension/payment/wasa');
 
@@ -168,8 +168,8 @@ class ControllerExtensionPaymentWasa extends Controller {
         }
     }
 
-    public function order() {
-
+    public function order()
+    {
         if ($this->config->get('wasa_status')) {
             $this->load->model('extension/payment/wasa');
             $this->load->language('extension/payment/wasa');
@@ -178,8 +178,8 @@ class ControllerExtensionPaymentWasa extends Controller {
         }
     }
 
-
-    protected function validate() {
+    protected function validate()
+    {
         if (!$this->user->hasPermission('modify', 'extension/payment/wasa')) {
             $this->error['warning'] = $this->language->get('error_permission');
         }

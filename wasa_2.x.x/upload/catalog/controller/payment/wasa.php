@@ -7,21 +7,25 @@ use Sdk\Response;
 
 require_once(DIR_SYSTEM.'library/Wasa.php');
 
-class ControllerPaymentWasa extends Controller {
-	public function index() {
-		$this->load->language('payment/wasa');
-		$this->load->model('payment/wasa');
-		$this->load->model('account/customer');
-		$this->load->model('account/address');
-		$this->load->model('localisation/country');
+class ControllerPaymentWasa extends Controller
+{
+    public function index()
+    {
+        $this->load->language('payment/wasa');
+        $this->load->model('payment/wasa');
+        $this->load->model('account/customer');
+        $this->load->model('account/address');
+        $this->load->model('localisation/country');
 
-		$data['publishable_key'] = $this->config->get('wasa_client_id');
-		$data['wasa_secret_key'] = $this->config->get('wasa_secret_key');
-		$data['wasa_test_mode'] = $this->config->get('wasa_test_mode');
-		$wasa_test_mode  = false;
-		if ($data['wasa_test_mode']) {
-			$wasa_test_mode  = true;
-		}
+        $data['publishable_key'] = $this->config->get('wasa_client_id');
+        $data['wasa_secret_key'] = $this->config->get('wasa_secret_key');
+        $data['wasa_test_mode'] = $this->config->get('wasa_test_mode');
+
+        $wasa_test_mode  = false;
+
+        if ($data['wasa_test_mode']) {
+            $wasa_test_mode  = true;
+        }
 
         $this->_client = new Client(
             $data['publishable_key'],
@@ -45,63 +49,64 @@ class ControllerPaymentWasa extends Controller {
         $purchaser_name = $b_address['firstname'].' '.$b_address['lastname'];
         $recipient_name = $d_address['firstname'].' '.$d_address['lastname'];
 
-		    $b_country = $this->model_localisation_country->getCountry($b_address['country_id']);
-		    $d_country = $this->model_localisation_country->getCountry($d_address['country_id']);
+        $b_country = $this->model_localisation_country->getCountry($b_address['country_id']);
+        $d_country = $this->model_localisation_country->getCountry($d_address['country_id']);
 
         $billing_address = array(
-            'company_name' => $b_address['company'],
+            'company_name'   => $b_address['company'],
             'street_address' => $b_address['address_1'],
-            'postal_code' => $b_address['postcode'],
-            'city' => $b_address['city'],
-            'country' => $b_country['name']
+            'postal_code'    => $b_address['postcode'],
+            'city'           => $b_address['city'],
+            'country'        => $b_country['name']
         );
 
         $delivery_address = array(
-            'company_name' => $d_address['company'],
+            'company_name'   => $d_address['company'],
             'street_address' => $d_address['address_1'],
-            'postal_code' => $d_address['postcode'],
-            'city' => $d_address['city'],
-            'country' => $d_country['name']
+            'postal_code'    => $d_address['postcode'],
+            'city'           => $d_address['city'],
+            'country'        => $d_country['name']
         );
 
         foreach ($cart_products as $product) {
-        	$tax = $this->currency->format(
-              $this->tax->getTax($product['price'], $product['tax_class_id']),
-              $this->session->data['currency'],
-              false,
-              false
+            $tax = $this->currency->format(
+                $this->tax->getTax($product['price'], $product['tax_class_id']),
+                $this->session->data['currency'],
+                false,
+                false
             );
 
-        	$price = $this->currency->format(
-              $product['price'],
-              $this->session->data['currency'],
-              false,
-              false
+            $price = $this->currency->format(
+                $product['price'],
+                $this->session->data['currency'],
+                false,
+                false
             );
 
-        	$tax = sprintf('%0.2f', $tax);
-        	$price = sprintf('%0.2f', $price);
-        	$tax_rate = $this->tax->getTax(100, $product['tax_class_id']);
+            $tax = sprintf('%0.2f', $tax);
+            $price = sprintf('%0.2f', $price);
+            $tax_rate = $this->tax->getTax(100, $product['tax_class_id']);
 
             $item = array(
-				'product_id' => $product['product_id'],
-				'product_name' => $product['name'],
-				'price_ex_vat' => array(
-				    'amount' => $price,
-				    'currency' => 'SEK'
-				),
-				'quantity' => $product['quantity'],
-				'vat_percentage' => $tax_rate,
-				'vat_amount' => array(
-				'amount' => $tax,
-				'currency' => 'SEK'
-				)
+                'product_id'   => $product['product_id'],
+                'product_name' => $product['name'],
+                'price_ex_vat' => array(
+                    'amount' => $price,
+                    'currency' => 'SEK'
+                ),
+                'quantity'       => $product['quantity'],
+                'vat_percentage' => $tax_rate,
+                'vat_amount'     => array(
+                    'amount'   => $tax,
+                    'currency' => 'SEK'
+                )
             );
 
             array_push($cart_items, $item);
         }
 
         $shipping_method_cost = 0;
+
         if (!empty($this->session->data['shipping_method']['cost'])) {
             $shipping_method_cost = $this->session->data['shipping_method']['cost'];
         }
@@ -122,72 +127,74 @@ class ControllerPaymentWasa extends Controller {
         }
 
         $payload = array(
-          'payment_types' => 'leasing',
-          'order_reference_id' => '',
-          'order_references' => array(
-                    array(
-                        'key' => 'partner_checkout_id',
-                        'value' => $this->session->data['order_id'],
-                    ),
-                    array(
-                        'key' => 'partner_reserved_order_number',
-                        'value' => $this->session->data['order_id'],
-                    ),
-          ),
-          'purchaser_name' => $firstname.' '.$lastname,
-          'purchaser_email' => $email,
-          'customer_organization_number' => '',
-          'purchaser_phone' => $telephone,
-          'delivery_address' => $delivery_address,
-          'billing_address' => $billing_address,
-          'recipient_name' => $firstname.' '.$lastname,
-          'recipient_phone' => $telephone,
-          'cart_items' => $cart_items,
-          'shipping_cost_ex_vat' => array(
-              'amount' => $this->currency->format(
-              $shipping_method_cost,
-              $this->session->data['currency'],
-              false,
-              false
+            'payment_types'      => 'leasing',
+            'order_reference_id' => '',
+            'order_references'   => array(
+                array(
+                    'key'   => 'partner_checkout_id',
+                    'value' => $this->session->data['order_id'],
+                ),
+                array(
+                    'key'   => 'partner_reserved_order_number',
+                    'value' => $this->session->data['order_id'],
+                ),
             ),
-            'currency' => 'SEK',
-          ),
-          'request_domain' => $this->config->get('config_ssl'),
-          'confirmation_callback_url' => $this->config->get('config_ssl'),
-          'ping_url' => $this->config->get('config_ssl')
+            'purchaser_name'               => $firstname.' '.$lastname,
+            'purchaser_email'              => $email,
+            'customer_organization_number' => '',
+            'purchaser_phone'              => $telephone,
+            'delivery_address'             => $delivery_address,
+            'billing_address'              => $billing_address,
+            'recipient_name'               => $firstname.' '.$lastname,
+            'recipient_phone'              => $telephone,
+            'cart_items'                   => $cart_items,
+            'shipping_cost_ex_vat'         => array(
+                'amount' => $this->currency->format(
+                    $shipping_method_cost,
+                    $this->session->data['currency'],
+                    false,
+                    false
+                ),
+                'currency' => 'SEK',
+            ),
+            'request_domain'            => $this->config->get('config_ssl'),
+            'confirmation_callback_url' => $this->config->get('config_ssl'),
+            'ping_url'                  => $this->config->get('config_ssl')
         );
 
-		$currency = $this->session->data['currency'];
-		if ($currency != 'SEK') {
+        $currency = $this->session->data['currency'];
+
+        if ($currency != 'SEK') {
             $error_message = 'Wasa leasing supports only Swedish Krona. Please change shop currency to Swedish Krona.';
             $error = true;
-		} else {
-	        $response = $this->_client->create_checkout($payload);
-	        if (!empty($response->data['invalid_properties'][0]['error_message'])) {
-	            $error_message = $response->data['invalid_properties'][0]['error_message'];
-	            $error = true;
-	        } else {
-	            $error = false;
-	        }
-		}
+        } else {
+            $response = $this->_client->create_checkout($payload);
+            if (!empty($response->data['invalid_properties'][0]['error_message'])) {
+                $error_message = $response->data['invalid_properties'][0]['error_message'];
+                $error = true;
+            } else {
+                $error = false;
+            }
+        }
 
-		if (isset($error) && $error == true) {
-			$data['error'] = $error_message;
-		} else {
-			$data['response'] = $response->data;
-		}
+        if (isset($error) && $error == true) {
+            $data['error'] = $error_message;
+        } else {
+            $data['response'] = $response->data;
+        }
 
-		$data['order_reference_id'] = $this->session->data['order_id'];
-		$data['redirect'] = $this->url->link('checkout/success');
-		$data['ajax'] = 'index.php?route=payment/wasa/send';
+        $data['order_reference_id'] = $this->session->data['order_id'];
+        $data['redirect'] = $this->url->link('checkout/success');
+        $data['ajax'] = 'index.php?route=payment/wasa/send';
 
-		return $this->load->view('payment/wasa.tpl', $data);
-	}
+        return $this->load->view('payment/wasa.tpl', $data);
+    }
 
-	public function send() {
-		$json = array();
+    public function send()
+    {
+        $json = array();
 
-		$this->load->model('checkout/order');
+        $this->load->model('checkout/order');
         $option = $this->request->post['option'];
 
         if ($option == 'checkout') {
@@ -203,5 +210,5 @@ class ControllerPaymentWasa extends Controller {
             $this->response->addHeader('Content-Type: application/json');
             $this->response->setOutput(json_encode($json));
         }
-	}
+    }
 }
