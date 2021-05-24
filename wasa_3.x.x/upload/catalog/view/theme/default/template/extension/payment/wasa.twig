@@ -1,70 +1,67 @@
 <div class="row">
-  <div class="col-md-12">
-  {% if error %}
+    <div class="col-md-12">
+        {% if error %}
+            <div class="alert alert-warning">
+                <i class="fa fa-check-circle"></i> {{ error }}
+            </div>
+        {% else %}
+            {{ response }}
+            <script>
+                window.wasaCheckout.init();
+            </script>
 
-      <div class="alert alert-warning"><i class="fa fa-check-circle"></i>&nbsp;&nbsp;{{ error }}</div>
-  {% else %}
-        {{ response }}
-        <script>
-          window.wasaCheckout.init();
-        </script>
+            <script>
+                var orderReferences = [
+                    { key: "partner_checkout_id", value: "{{ order_reference_id }}" },
+                    { key: "partner_reserved_order_number", value: "{{ order_reference_id }}" }
+                ];
 
-      <script>
-          var orderReferences = [
-              { key: "partner_checkout_id", value: "{{ order_reference_id }}" },
-              { key: "partner_reserved_order_number", value: "{{ order_reference_id }}" }
-          ];
+                var redirect = '{{ redirect }}';
+                var order_reference_id = '{{ order_reference_id }}';
 
-          var redirect = '{{ redirect }}';
-          var order_reference_id = '{{ order_reference_id }}';
-
-          var options = {
-              onComplete: function(orderReferences){
-                  updateWasa();
-              },
-              onRedirect: function(orderReferences){
-                  createOrder(); 
-              },
-              onCancel: function(orderReferences){
-                  window.location.href = 'index.php?route=checkout/checkout';
-              }
-          };   
-
-          window.wasaCheckout.init(options);
-
-          setTimeout(function(){
-              id_wasakredit = $('#wasaIframe').attr('src').split("id=")[1];
-          }, 1000);
-
-          function updateWasa(){
-
-            $.ajax({
-                type: "POST",
-                url: '{{ ajax }}',
-                data: {
-                  id_wasakredit: id_wasakredit,
-                  option: 'checkout'
-                },
-                success: function(response) {
-                    if (response) {
-                      if (response['processed'] == true) {
-                          createOrder();  
-                      }else{
-                          window.location.href = 'index.php?route=checkout/checkout';
-                      }
+                var options = {
+                    onComplete: function(orderReferences){
+                        updateWasa();
+                    },
+                    onRedirect: function(orderReferences){
+                        createOrder();
+                    },
+                    onCancel: function(orderReferences){
+                        window.location.href = 'index.php?route=checkout/checkout';
                     }
+                };
+
+                window.wasaCheckout.init(options);
+
+                setTimeout(function(){
+                    id_wasakredit = $('#wasaIframe').attr('src').split("id=")[1];
+                }, 1000);
+
+                function updateWasa(){
+                    $.ajax({
+                        type: "POST",
+                        url: '{{ ajax }}',
+                        data: {
+                            id_wasakredit: id_wasakredit,
+                            option: 'checkout'
+                        },
+                        success: function(response) {
+                            if (response) {
+                                if (response['processed'] == true) {
+                                    createOrder();
+                                } else {
+                                    window.location.href = 'index.php?route=checkout/checkout';
+                                }
+                            }
+                        }
+                    });
+                    return true;
                 }
-            });
-            return true;
-          }
 
-          function createOrder(){
-            window.location.href = redirect;
-          }
-
-      </script>
-    {% endif %}
-
-
-  </div>
+                function createOrder(){
+                    window.location.href = redirect;
+                }
+            </script>
+        {% endif %}
+    </div>
 </div>
