@@ -43,6 +43,7 @@ class ControllerExtensionPaymentWasa extends Controller
         $data['heading_title']         = $this->language->get('heading_title');
 
         $data['tab_settings']          = $this->language->get('tab_settings');
+        $data['tab_order_status']      = $this->language->get('tab_order_status');
 
         $data['text_payment']          = $this->language->get('text_payment');
         $data['text_edit']             = $this->language->get('text_edit');
@@ -114,18 +115,29 @@ class ControllerExtensionPaymentWasa extends Controller
             $data['payment_wasa_secret_key'] = '';
         }
 
-        if (isset($this->request->post['payment_wasa_order_status_id'])) {
-            $data['payment_wasa_order_status_id'] = $this->request->post['payment_wasa_order_status_id'];
-        } else {
-            $data['payment_wasa_order_status_id'] = $this->config->get('payment_wasa_order_status_id');
-        }
-
         if (isset($this->request->post['payment_wasa_status'])) {
             $data['payment_wasa_status'] = $this->request->post['payment_wasa_status'];
         } elseif ($this->config->has('payment_wasa_status')) {
             $data['payment_wasa_status'] = $this->config->get('payment_wasa_status');
         } else {
             $data['payment_wasa_status'] = 1;
+        }
+
+        $order_statuses = [
+            'payment_wasa_created_order_status_id',
+            'payment_wasa_initialized_order_status_id',
+            'payment_wasa_canceled_order_status_id',
+            'payment_wasa_pending_order_status_id',
+            'payment_wasa_ready_order_status_id',
+            'payment_wasa_shipped_order_status_id',
+        ];
+
+        foreach ($order_statuses as $order_status) {
+            if (isset($this->request->post[$order_status])) {
+                $data[$order_status] = $this->request->post[$order_status];
+            } else {
+                $data[$order_status] = $this->config->get($order_status);
+            }
         }
 
         if (isset($this->error['warning'])) {
