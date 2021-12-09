@@ -1,8 +1,8 @@
 # Wasa Kredit for OpenCart v3.0+
-This is a payment extension for OpenCart 3.0.0.0 - 3.0.3.7.
+This is a payment extension for OpenCart 3.0.0.0 - 3.0.3.8.
 
 ## Installation Guide
-Before installing the extension, make sure that there is a backup of web store!
+Before installing the extension, make sure to backup the store!
 
 1. Download the extension
 2. Extract the content form the ZIP file
@@ -10,9 +10,9 @@ Before installing the extension, make sure that there is a backup of web store!
 4. Log in as an administrator and navigate to Extensions -> Extensions -> Payments
 5. Click on the install button for the Wasa Kredit extension
 6. Click on the edit button for the Wasa Kredit extension
-7. Enter your Client ID and Secret key
+7. Enter your Client ID and Secret Key
 8. Select default order status for new orders
-9. Save!
+9. Save
 
 ## Extension for OpenCart 2.0 and 2.3
 Our extensions for OpenCart 2.0 and 2.3 has been moved to separate branches and has been marked as legacy.
@@ -26,25 +26,17 @@ Extension for OpenCart 2.3 can be found here:\
 https://github.com/wasakredit/opencart-extension/tree/opencart-v2-3
 
 ## Monthly Price Widget
-To display our monthly cost widget on your product page, you will need to manually edit the product page template:
+To display our monthly cost widget on your product page, you will need to manually install the modification.
 
-### /catalog/view/theme/default/template/product/product.twigl
-Paste the following code where you want the widget to appear:
-```
-{{ wasa_widget }}
-```
+1. Navigate to _Extensions -> Installer_
+2. Click on _Upload_ and select _wasa-widget.ocmod.zip_ from the widget folder
+3. Navigate to _Extensions -> Modifications_
+4. Click on _Refresh_.
 
-### /catalog/controller/product/product.php
-Find this code:
-```
-if ($product_info) {
-```
+If you have a custom theme you'll' need to manually modify this template:
 
-Below that line, enter this code:
-```
-$this->load->model('payment/wasa');
+`catalog/view/theme/[YOUR THEME]/template/product/product.twig`
 
-$wasa_price = $this->currency->format($product_info['price'], $this->session->data['currency'], false, false);
+Insert this following line where you want to add the widget:
 
-$data['wasa_widget'] = $this->model_payment_wasa->getWidget($wasa_price);
-```
+`{# wasa-monthly-cost-widget #}`
