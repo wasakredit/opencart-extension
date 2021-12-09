@@ -1,6 +1,6 @@
 <?php
 
-require_once(DIR_SYSTEM . 'library/wasa/wasa/client-php-sdk/wasa.php');
+require_once(DIR_SYSTEM . 'library/wasa/wasa/client-php-sdk/Wasa.php');
 
 class ControllerExtensionPaymentWasa extends Controller
 {
@@ -10,6 +10,7 @@ class ControllerExtensionPaymentWasa extends Controller
 
         $this->load->model('extension/payment/wasa');
         $this->load->model('localisation/country');
+        $this->load->model('account/customer');
 
         $this->client = Sdk\ClientFactory::CreateClient(
             $this->config->get('payment_wasa_client_id'),
@@ -27,7 +28,6 @@ class ControllerExtensionPaymentWasa extends Controller
         $shipping_country = $this->model_localisation_country->getCountry($shipping_address['country_id']);
 
         if ($this->customer->isLogged()) {
-            $this->load->model('account/customer');
             $customer = $this->model_account_customer->getCustomer($this->customer->getId());
 
             $name = sprintf('%s %s', $customer['firstname'], $customer['lastname']);
@@ -66,20 +66,11 @@ class ControllerExtensionPaymentWasa extends Controller
 
         $shipping_cost = $this->currency->format($shipping_cost, $this->session->data['currency'], false, false);
 
-        $domain = $this->config->get('config_ssl');
-        $callback = $this->config->get('config_ssl');
-        $ping = $this->config->get('config_ssl');
-
         $payload = [
             'payment_types' => 'leasing',
-            'order_reference_id' => '',
             'order_references' => [
                 [
-                    'key' => 'partner_checkout_id',
-                    'value' => $this->session->data['order_id'],
-                ],
-                [
-                    'key' => 'partner_reserved_order_number',
+                    'key' => 'partner_order_number',
                     'value' => $this->session->data['order_id'],
                 ],
             ],
@@ -108,62 +99,172 @@ class ControllerExtensionPaymentWasa extends Controller
                 'amount' => $shipping_cost,
                 'currency' => $this->session->data['currency'],
             ],
-            'request_domain' => $domain,
-            'confirmation_callback_url' => $callback,
-            'ping_url' => $ping
+            'request_domain' => $this->config->get('config_ssl'),
+            'confirmation_callback_url' => $this->url->link('checkout/success', '', true),
+            'ping_url' => $this->url->link('extension/payment/wasa/callback', '', true),
         ];
 
         if ($this->session->data['currency'] != 'SEK') {
             $error_message = $this->language->get('error_currency');
-            $error = true;
         } else {
             $response = $this->client->create_checkout($payload);
 
             if (!empty($response->data['invalid_properties'][0]['error_message'])) {
                 $error_message = $response->data['invalid_properties'][0]['error_message'];
-                $error = true;
-            } else {
-                $error = false;
             }
         }
 
-        if (isset($error) && $error == true) {
+        if (!empty($error_message)) {
             $data['error'] = $error_message;
         } else {
-            $data['response'] = $response->data;
+            $data['checkout'] = $response->data;
         }
 
         $data['test_mode'] = $this->config->get('payment_wasa_test_mode');
         $data['order_id'] = $this->session->data['order_id'];
-        $data['url_checkout'] = $this->url->link('checkout/checkout', '', true);
-        $data['url_confirm'] = $this->url->link('extension/payment/wasa/send', '', true);
+
+        $data['create_url'] = $this->url->link('extension/payment/wasa/create', '', true);
+        $data['success_url'] = $this->url->link('checkout/success', '', true);
+        $data['cancel_url'] = $this->url->link('checkout/checkout', '', true);
 
         return $this->load->view('extension/payment/wasa', $data);
     }
 
-    public function send()
+    public function create()
     {
+        if ($this->request->server['REQUEST_METHOD'] != 'POST') {
+            $this->response->addHeader('HTTP/1.0 405 Method Not Allowed');
+            exit('Method not allowed');
+        } elseif (empty($this->request->post['data'])) {
+            $this->response->addHeader('HTTP/1.1 400 Bad Request');
+            exit('Payload is empty');
+        }
+
+        foreach ($this->request->post['data'] as $property) {
+            switch ($property['key']) {
+                case 'wasakredit-order-id':
+                    $wasa_order_id = strval($property['value']);
+                    break;
+
+                case 'partner_order_number':
+                    $order_id = intval($property['value']);
+                    break;
+            }
+        }
+
+        if (empty($wasa_order_id) || empty($order_id)) {
+            $this->response->addHeader('HTTP/1.1 400 Bad Request');
+            exit('References is empty');
+        }
+
         $this->load->model('checkout/order');
 
-        if ($this->request->post['option'] !== 'checkout') {
-            $json['processed'] = false;
-        } else {
-            if (!empty($this->request->post['id_wasakredit'])) {
-                $message = sprintf('Wasa Kredit - Payment ID: %s', $this->request->post['id_wasakredit']);
+        $order = $this->model_checkout_order->getOrder($order_id);
 
-                try {
-                    $this->model_checkout_order->addOrderHistory($this->session->data['order_id'], $this->config->get('payment_wasa_order_status_id'), $message, false);
-                } catch (Exception $e) {
-                    //
-                }
+        if ($order['order_status_id'] > 0) {
+            $this->response->addHeader('Content-Type: application/json');
+            $this->response->setOutput(null);
+        }
 
-                $json['redirect'] = $this->url->link('checkout/checkout', '', true);
-            }
+        $message = sprintf('Signering slutförd av kunden (%s)', $wasa_order_id);
 
-            $json['processed'] = true;
+        try {
+            $this->model_checkout_order->addOrderHistory($order_id, $this->config->get('payment_wasa_created_order_status_id'), $message, true);
+        } catch (Exception $e) {
+            //
         }
 
         $this->response->addHeader('Content-Type: application/json');
-        $this->response->setOutput(json_encode($json ?? []));
+        $this->response->setOutput(null);
+    }
+
+    public function callback()
+    {
+        $request = (strpos($this->request->server['CONTENT_TYPE'], 'application/json') !== false)
+            ? json_decode(file_get_contents('php://input'), true)
+            : $this->request->post;
+
+        if ($this->request->server['REQUEST_METHOD'] != 'POST') {
+            $this->response->addHeader('HTTP/1.0 405 Method Not Allowed');
+            exit('Method not allowed');
+        } elseif (empty($request['order_id'])) {
+            $this->response->addHeader('HTTP/1.1 400 Bad Request');
+            exit('Order id is empty');
+        } elseif (empty($request['order_status'])) {
+            $this->response->addHeader('HTTP/1.1 400 Bad Request');
+            exit('Order status is empty');
+        } elseif ($request['order_status'] === 'initialized') {
+            $this->response->addHeader('Content-Type: application/json');
+            exit(null);
+        } elseif ($request['order_status'] === 'pending') {
+            $this->response->addHeader('Content-Type: application/json');
+            exit(null);
+        }
+
+        $wasa_order_id = $request['order_id'];
+        $wasa_order_status = $request['order_status'];
+
+        $this->client = Sdk\ClientFactory::CreateClient(
+            $this->config->get('payment_wasa_client_id'),
+            $this->config->get('payment_wasa_secret_key'),
+            $this->config->get('payment_wasa_test_mode')
+        );
+
+        $response = $this->client->get_order($wasa_order_id);
+
+        foreach ($response->data['order_references'] as $property) {
+            switch ($property['key']) {
+                case 'wasakredit-order-id':
+                    $wasa_order_id = strval($property['value']);
+                    break;
+
+                case 'partner_order_number':
+                    $order_id = intval($property['value']);
+                    break;
+            }
+        }
+
+        if (empty($wasa_order_id) || empty($order_id)) {
+            $this->response->addHeader('HTTP/1.1 400 Bad Request');
+            exit('References is empty');
+        }
+
+        $this->load->model('checkout/order');
+
+        $order_status = $this->convertOrderStatus($wasa_order_status);
+
+        $message = sprintf('Avtalet godkänt as Wasa (%s)', $wasa_order_id);
+
+        try {
+            $this->model_checkout_order->addOrderHistory($order_id, $order_status, $message, false);
+        } catch (Exception $e) {
+            //
+        }
+
+        $this->response->addHeader('Content-Type: application/json');
+        $this->response->setOutput(null);
+    }
+
+    private function convertOrderStatus(string $order_status)
+    {
+        switch ($order_status) {
+            case 'initialized':
+                return $this->config->get('payment_wasa_initialized_order_status_id');
+
+            case 'pending':
+                return $this->config->get('payment_wasa_pending_order_status_id');
+
+            case 'ready_to_ship':
+                return $this->config->get('payment_wasa_ready_order_status_id');
+
+            case 'shipped':
+                return $this->config->get('payment_wasa_shipped_order_status_id');
+
+            case 'canceled':
+                return $this->config->get('payment_wasa_canceled_order_status_id');
+
+            default:
+                return null;
+        }
     }
 }
