@@ -40,46 +40,6 @@ class ControllerExtensionPaymentWasa extends Controller
             'href' => $this->url->link('extension/payment/wasa', 'user_token=' . $this->session->data['user_token'], true)
         );
 
-        $data['heading_title']         = $this->language->get('heading_title');
-
-        $data['tab_settings']          = $this->language->get('tab_settings');
-        $data['tab_order_status']      = $this->language->get('tab_order_status');
-
-        $data['text_payment']          = $this->language->get('text_payment');
-        $data['text_edit']             = $this->language->get('text_edit');
-        $data['text_live']             = $this->language->get('text_live');
-        $data['text_test']             = $this->language->get('text_test');
-        $data['text_enabled']          = $this->language->get('text_enabled');
-        $data['text_disabled']         = $this->language->get('text_disabled');
-        $data['text_other']            = $this->language->get('text_other');
-
-        $data['entry_email_address']   = $this->language->get('entry_email_address');
-        $data['entry_password']        = $this->language->get('entry_password');
-        $data['entry_currency']        = $this->language->get('entry_currency');
-        $data['entry_warehouse']       = $this->language->get('entry_warehouse');
-        $data['entry_country']         = $this->language->get('entry_country');
-        $data['entry_merchant_number'] = $this->language->get('entry_merchant_number');
-        $data['entry_secret_key']      = $this->language->get('entry_secret_key');
-        $data['entry_test_mode']       = $this->language->get('entry_test_mode');
-        $data['entry_order_status']    = $this->language->get('entry_order_status');
-        $data['entry_status']          = $this->language->get('entry_status');
-        $data['entry_logging']         = $this->language->get('entry_logging');
-        $data['entry_sort_order']      = $this->language->get('entry_sort_order');
-        $data['entry_api_key']         = $this->language->get('entry_api_key');
-        $data['entry_card']            = $this->language->get('entry_card');
-
-        $data['help_email_address']    = $this->language->get('help_email_address');
-        $data['help_password']         = $this->language->get('help_password');
-        $data['help_currency']         = $this->language->get('help_currency');
-        $data['help_test']             = $this->language->get('help_test');
-        $data['help_secret_key']       = $this->language->get('help_secret_key');
-        $data['help_order_status']     = $this->language->get('help_order_status');
-        $data['help_logging']          = $this->language->get('help_logging');
-
-        $data['button_save']           = $this->language->get('button_save');
-        $data['button_cancel']         = $this->language->get('button_cancel');
-        $data['currencies']            = ['SEK'];
-
         $data['action'] = $this->url->link('extension/payment/wasa', 'user_token=' . $this->session->data['user_token'], true);
         $data['cancel'] = $this->url->link('extension/extension', 'user_token=' . $this->session->data['user_token'] . '&type=payment', true);
 
@@ -89,14 +49,6 @@ class ControllerExtensionPaymentWasa extends Controller
             $data['payment_wasa_test_mode'] = $this->config->get('payment_wasa_test_mode');
         } else {
             $data['payment_wasa_test_mode'] = 1;
-        }
-
-        if (isset($this->request->post['payment_wasa_currency'])) {
-            $data['payment_wasa_currency'] = $this->request->post['payment_wasa_currency'];
-        } elseif ($this->config->has('wasa_currency')) {
-            $data['payment_wasa_currency'] = $this->config->get('payment_wasa_currency');
-        } else {
-            $data['payment_wasa_currency'] = 'SEK';
         }
 
         if (isset($this->request->post['payment_wasa_client_id'])) {
@@ -121,6 +73,14 @@ class ControllerExtensionPaymentWasa extends Controller
             $data['payment_wasa_status'] = $this->config->get('payment_wasa_status');
         } else {
             $data['payment_wasa_status'] = 1;
+        }
+
+        if (isset($this->request->post['payment_wasa_show_widget'])) {
+            $data['payment_wasa_show_widget'] = $this->request->post['payment_wasa_show_widget'];
+        } elseif ($this->config->has('payment_wasa_show_widget')) {
+            $data['payment_wasa_show_widget'] = $this->config->get('payment_wasa_show_widget');
+        } else {
+            $data['payment_wasa_show_widget'] = 0;
         }
 
         $order_statuses = [

@@ -5,6 +5,7 @@ $_['heading_title']                  = 'Wasa Kredit';
 
 // Tab
 $_['tab_settings']                   = 'Settings';
+$_['tab_monthly_cost']               = 'Monthly cost';
 $_['tab_order_status']               = 'Order status';
 
 // Text
@@ -17,6 +18,8 @@ $_['entry_client_id']                = 'Client ID';
 $_['entry_secret_key']               = 'Secret Key';
 $_['entry_test_mode']                = 'Test Mode';
 $_['entry_status']                   = 'Status';
+
+$_['entry_show_widget']              = 'Show Widget';
 
 $_['entry_created_order_status']     = 'Created';
 $_['entry_initialized_order_status'] = 'Initialized';
