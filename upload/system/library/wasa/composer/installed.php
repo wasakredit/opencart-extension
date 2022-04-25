@@ -5,7 +5,7 @@
         'type' => 'library',
         'install_path' => __DIR__ . '/../../../../../',
         'aliases' => array(),
-        'reference' => '03acd2fd731f40096ba977e4e1807b8657f0b0b6',
+        'reference' => 'ac9fef3715ad82dddfb2ee9dd0255c2ab479bc78',
         'name' => 'wasa/opencart-extension',
         'dev' => true,
     ),
@@ -18,7 +18,7 @@
             'aliases' => array(
                 0 => '9999999-dev',
             ),
-            'reference' => '5e36a430694e7f1d3d73c72968ee5d960744b306',
+            'reference' => 'a8eca895c63e531825fa291e8c4898dbe782635b',
             'dev_requirement' => false,
         ),
         'wasa/opencart-extension' => array(
@@ -27,7 +27,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../../../../../',
             'aliases' => array(),
-            'reference' => '03acd2fd731f40096ba977e4e1807b8657f0b0b6',
+            'reference' => 'ac9fef3715ad82dddfb2ee9dd0255c2ab479bc78',
             'dev_requirement' => false,
         ),
     ),
