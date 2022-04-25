@@ -16,8 +16,9 @@ class ModelExtensionModuleWasa extends Model
             $this->config->get('payment_wasa_test_mode')
         );
 
-        $price = !empty($product['special']) ? $product['special'] : $product['price'];
-        $price = $this->tax->calculate($price, $product['tax_class_id'], $this->config->get('config_tax'));
+        $price = !empty($product['special'])
+            ? $this->tax->calculate($product['special'], $product['tax_class_id'], $this->config->get('config_tax'))
+            : $this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax'));
 
         $response = $this->client->get_monthly_cost_widget($price, $format);
 

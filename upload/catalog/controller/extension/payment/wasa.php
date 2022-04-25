@@ -171,7 +171,9 @@ class ControllerExtensionPaymentWasa extends Controller
         try {
             $this->model_checkout_order->addOrderHistory($order_id, $this->config->get('payment_wasa_created_order_status_id'), $message, true);
         } catch (Exception $e) {
-            //
+            if (method_exists($e, 'getMessage')) {
+                $this->log->write($e->getMessage());
+            }
         }
 
         $this->response->addHeader('Content-Type: application/json');
@@ -238,7 +240,9 @@ class ControllerExtensionPaymentWasa extends Controller
         try {
             $this->model_checkout_order->addOrderHistory($order_id, $order_status, $message, false);
         } catch (Exception $e) {
-            //
+            if (method_exists($e, 'getMessage')) {
+                $this->log->write($e->getMessage());
+            }
         }
 
         $this->response->addHeader('Content-Type: application/json');
