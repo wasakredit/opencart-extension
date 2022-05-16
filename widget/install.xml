@@ -12,7 +12,7 @@
             <add position="before"><![CDATA[
                 // Modification for Wasa kredit Monthly Cost Widget
                 $this->load->model('extension/module/wasa_widget');
-                $data['wasa_widget'] = $this->model_extension_module_wasa->getWidget($product_info);
+                $data['wasa_widget'] = $this->model_extension_module_wasa_widget->getWidget($product_info);
             ]]></add>
         </operation>
     </file>
