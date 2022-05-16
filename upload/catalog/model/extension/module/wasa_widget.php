@@ -2,18 +2,18 @@
 
 require_once(DIR_SYSTEM . 'library/wasa/wasa/client-php-sdk/Wasa.php');
 
-class ModelExtensionModuleWasa extends Model
+class ModelExtensionModuleWasaWidget extends Model
 {
     public function getWidget($product, $format = 'small')
     {
-        if (!$this->config->get('payment_wasa_show_widget')) {
+        if (!$this->config->get('payment_wasa_leasing_show_widget')) {
             return;
         }
 
         $this->client = Sdk\ClientFactory::CreateClient(
-            $this->config->get('payment_wasa_client_id'),
-            $this->config->get('payment_wasa_secret_key'),
-            $this->config->get('payment_wasa_test_mode')
+            $this->config->get('payment_wasa_leasing_client_id'),
+            $this->config->get('payment_wasa_leasing_secret_key'),
+            $this->config->get('payment_wasa_leasing_test_mode')
         );
 
         $price = !empty($product['special'])
@@ -22,7 +22,7 @@ class ModelExtensionModuleWasa extends Model
 
         $response = $this->client->get_monthly_cost_widget($price, $format);
 
-        return $this->load->view('extension/module/wasa', [
+        return $this->load->view('extension/module/wasa_widget', [
             'snippet' => $response->data ?? null
         ]);
     }

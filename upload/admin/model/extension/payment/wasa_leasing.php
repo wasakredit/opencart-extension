@@ -1,5 +1,5 @@
 <?php
-class ModelExtensionPaymentWasa extends Model
+class ModelExtensionPaymentWasaLeasing extends Model
 {
     public function install()
     {

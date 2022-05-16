@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <modification>
     <name>Wasa Kredit - Widget for monthly cost</name>
-    <version>1.0</version>
+    <version>1.1</version>
     <author>David Villa</author>
     <link>https://wasakredit.se/</link>
     <code>wasa_widget_monthly_cost</code>
@@ -11,7 +11,7 @@
             <search><![CDATA[if ($product_info) {]]></search>
             <add position="before"><![CDATA[
                 // Modification for Wasa kredit Monthly Cost Widget
-                $this->load->model('extension/module/wasa');
+                $this->load->model('extension/module/wasa_widget');
                 $data['wasa_widget'] = $this->model_extension_module_wasa->getWidget($product_info);
             ]]></add>
         </operation>

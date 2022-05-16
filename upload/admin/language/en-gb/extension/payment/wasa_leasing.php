@@ -1,7 +1,7 @@
 <?php
 
 // Heading
-$_['heading_title']                  = 'Wasa Kredit';
+$_['heading_title']                  = 'Wasa Kredit - Leasing';
 
 // Tab
 $_['tab_settings']                   = 'Settings';
@@ -37,7 +37,7 @@ $_['help_shipped_order_status']      = 'Order status when a payment is completed
 $_['help_canceled_status_id']        = 'Order status when a payment is cancelled.';
 
 // Logo
-$_['text_wasa']                      = '<img src="view/image/payment/wasa.png" alt="Wasa Kredit" title="Wasa Kredit" style="border: 1px solid #EEEEEE; height: 35px;" />';
+$_['text_wasa_leasing']              = '<img src="view/image/payment/wasa_leasing.png" alt="Wasa Kredit Leasing" title="Wasa Kredit Leasing" style="border: 1px solid #EEEEEE; height: 35px;" />';
 
 // Error
 $_['error_permission']               = 'Warning: You do not have permission to modify payment Wasa Kredit Payment!';
