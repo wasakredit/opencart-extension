@@ -107,7 +107,7 @@ class ControllerExtensionPaymentWasaLeasing extends Controller
         if ($this->session->data['currency'] != 'SEK') {
             $error_message = $this->language->get('error_currency');
         } else {
-            $response = $this->client->create_checkout($payload);
+            $response = $this->client->create_leasing_checkout($payload);
 
             if (!empty($response->data['invalid_properties'][0]['error_message'])) {
                 $error_message = $response->data['invalid_properties'][0]['error_message'];
