@@ -7,18 +7,15 @@ This extension allows you to receive payments from your customers through:
 :white_check_mark: Leasing Checkout
 
 ## Installation Guide
-Before installing the extension, make sure to backup your web store!
+Before installing the extension, make sure to ***backup*** your web store!
 
-1. From the [releases page](https://github.com/wasakredit/opencart-extension/releases), download the latest version.
-2. Extract the content from previously downloaded zip archive.
-3. Upload the content of the *upload* folder to the root of your web store.
-4. Log in to your OpenCart administrator backend.
-5. Navigate to *Extensions -> Extensions -> Payments*.
-6. Find the *Wasa Kredit - Leasing* and/or *Wasa Kredit - Invoice* in the module list and click the *Install* button.
-7. Find the *Wasa Kredit - Leasing* and/or *Wasa Kredit - Invoice* in the module list and click the *Edit* button.
-8. Enter your *Client ID* and *Client secret key*.
-9. Set the settings as desired.
-10. Save!
+1. From the [releases page](https://github.com/wasakredit/opencart-extension/releases), download ***wasa-extension.ocmod.zip***.
+2. Go to *Admin → Extensions → Installer* and upload the downloaded ***wasa-extension.ocmod.zip*** file.
+3. When uploaded successfully, go to *Admin → Extensions → Payments*.
+4. Find the *Wasa Kredit - Leasing* and/or *Wasa Kredit - Invoice* in the module list and click the *Install* button.
+5. Find the *Wasa Kredit - Leasing* and/or *Wasa Kredit - Invoice* in the module list and click the *Edit* button.
+6. Enter your *Client ID* and *Client secret key*.
+7. Save!
 
 ## Upgrading from v1.3.1 (or earlier)
 If you are upgrading from v1.3.1 (or earlier) to v1.4.0 (or later), please follow these instructions
@@ -63,10 +60,9 @@ https://github.com/wasakredit/opencart-extension/tree/opencart-v2-3
 ## Monthly Price Widget
 To display our monthly cost widget on your product page, you will need to manually install the modification.
 
-1. Navigate to _Extensions -> Installer_
-2. Click on _Upload_ and select _wasa-widget.ocmod.zip_ from the widget folder
-3. Navigate to _Extensions -> Modifications_
-4. Click on _Refresh_.
+1. From the [releases page](https://github.com/wasakredit/opencart-extension/releases), download ***wasa-widget.ocmod.zip***.
+2. Go to *Admin → Extensions → Installer* and upload the downloaded ***wasa-widget.ocmod.zip*** file.
+3. Go to *Admin → Extensions → Modifications* and click on *Refresh*.
 
 If you have a custom theme you'll' need to manually modify this template:
 
