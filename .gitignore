@@ -1,1 +1,3 @@
+extension/vendor/composer/*
+extension/vendor/autoload.php
 .DS_Store
