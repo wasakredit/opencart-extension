@@ -1,5 +1,5 @@
-# Wasa Kredit for OpenCart v3.0+
-This is a payment extension for OpenCart 3.0.0.0 - 3.0.3.8.
+# Wasa Kredit for OpenCart v4.x
+This is a payment extension for OpenCart v4.0.0.0 or later.
 
 This extension allows you to receive payments from your customers through:
 
@@ -17,37 +17,15 @@ Before installing the extension, make sure to ***backup*** your web store!
 6. Enter your *Client ID* and *Client secret key*.
 7. Save!
 
-## Upgrading from v1.3.1 (or earlier)
-If you are upgrading from v1.3.1 (or earlier) to v1.4.0 (or later), please follow these instructions
-before atemptning the upgrade to avoid any issues caused by the breaking changes in v1.4.0.
-
-- Uninstall your current version of the extension
-	- Found at `Extensions -> Extensions -> Payments`
-- Uninstall your current version of the modification (if installed)
-	- Found at `Extensions -> Modifications`
-- Delete the following files accosisated with your current version:
-	- `/admin/controller/extension/payment/wasa.php`
-	- `/admin/language/en-gb/extension/payment/wasa.php`
-	- `/admin/language/sv-se/extension/payment/wasa.php`
-	- `/admin/model/extension/payment/wasa.php`
-	- `/admin/view/template/extension/payment/wasa.twig`
-	- `/catalog/controller/extension/payment/wasa.php`
-	- `/catalog/language/en-gb/extension/payment/wasa.php`
-	- `/catalog/language/sv-se/extension/payment/wasa.php`
-	- `/catalog/model/extension/module/wasa.php`
-	- `/catalog/model/extension/payment/wasa.php`
-	- `/catalog/view/theme/default/template/extension/module/wasa.twig`
-	- `/catalog/view/theme/default/template/extension/payment/wasa.twig`
-
 ## Requirements
 
 This is the requirements to run this module:
-- OpenCart 3.0.0.0 or later
-- PHP 7.3 or later
+- OpenCart 4.0.0.0 or later
+- PHP 8.0 or later
 - A valid, approved Wasa Kredit merchant account
 
-## Extension for OpenCart 2.0 and 2.3
-Our extensions for OpenCart 2.0 and 2.3 has been moved to separate branches and has been marked as legacy.
+## Extension for OpenCart 2.0, 2.3 and 3.0
+Our extensions for OpenCart 2.0, 2.3 and 3.0 has been moved to separate branches and has been marked as legacy.
 Please note that we no longer actively update these versions, we recommend that you update to a newer version of OpenCart.
 However, we are still fixing bugs caused by the extension.
 
@@ -56,6 +34,9 @@ https://github.com/wasakredit/opencart-extension/tree/opencart-v2-0
 
 Extension for OpenCart 2.3 can be found here:\
 https://github.com/wasakredit/opencart-extension/tree/opencart-v2-3
+
+Extension for OpenCart 3.0 can be found here:\
+https://github.com/wasakredit/opencart-extension/tree/opencart-v3-0
 
 ## Monthly Price Widget
 To display our monthly cost widget on your product page, you will need to manually install the modification.
@@ -74,10 +55,6 @@ Insert this following line where you want to add the widget:
 
 ## Support
 
-If you have spotted a bug or a technical problem, create a [GitHub issue](https://github.com/wasakredit/prestashop-addon-1.7/issues).
+If you have spotted a bug or a technical problem, create a [GitHub issue](https://github.com/wasakredit/opencart-extension/issues).
 For other questions, contact our [support team](https://developer.wasakredit.se/contact).
-
-*We only support the plugin with no customizations.
-Please make sure before you raise an issue that you revisit it on a newly installed "vanilla" Prestashop environment.
-With this practise you can make sure that the issue is not created by a customization or a third party plugin.*
 
