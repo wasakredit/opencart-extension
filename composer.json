@@ -1,6 +1,18 @@
 {
     "name": "wasa/opencart-extension",
-    "description": "Payment extension for OpenCart",
+    "description": "Extensions for OpenCart 4.x",
+    "version": "2.0.0",
+    "type": "library",
+    "keywords": ["opencart", "wasa kredit", "extension"],
+    "homepage": "https://wasakredit.se",
+    "authors": [
+        {
+            "name": "David Villa",
+            "email": "david@kfoobar.se",
+            "homepage": "https://kfoobar.se",
+            "role": "Developer"
+        }
+    ],
     "repositories": [
         {
             "type": "vcs",
@@ -11,6 +23,11 @@
         "wasa/client-php-sdk": "dev-master#v3.0"
     },
     "config": {
-        "vendor-dir": "upload/system/library/wasa/"
-    }
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "vendor-dir": "extension/vendor/"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
