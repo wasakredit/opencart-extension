@@ -14,7 +14,6 @@
             <script>
                 window.wasaCheckout.init({
                     onComplete: function(orderReferences) {
-                        console.log('onComplete');
                         $.ajax({
                             type: 'POST',
                             url: '{{ create_url }}',

@@ -2,20 +2,20 @@
 
 require_once(DIR_SYSTEM . 'library/wasa/wasa/client-php-sdk/Wasa.php');
 
-class ControllerExtensionPaymentWasa extends Controller
+class ControllerExtensionPaymentWasaLeasing extends Controller
 {
     public function index()
     {
-        $this->load->language('extension/payment/wasa');
+        $this->load->language('extension/payment/wasa_leasing');
 
-        $this->load->model('extension/payment/wasa');
+        $this->load->model('extension/payment/wasa_leasing');
         $this->load->model('localisation/country');
         $this->load->model('account/customer');
 
         $this->client = Sdk\ClientFactory::CreateClient(
-            $this->config->get('payment_wasa_client_id'),
-            $this->config->get('payment_wasa_secret_key'),
-            $this->config->get('payment_wasa_test_mode')
+            $this->config->get('payment_wasa_leasing_client_id'),
+            $this->config->get('payment_wasa_leasing_secret_key'),
+            $this->config->get('payment_wasa_leasing_test_mode')
         );
 
         $payment_address = $this->session->data['payment_address'];
@@ -101,13 +101,13 @@ class ControllerExtensionPaymentWasa extends Controller
             ],
             'request_domain' => $this->config->get('config_ssl'),
             'confirmation_callback_url' => $this->url->link('checkout/success', '', true),
-            'ping_url' => $this->url->link('extension/payment/wasa/callback', '', true),
+            'ping_url' => $this->url->link('extension/payment/wasa_leasing/callback', '', true),
         ];
 
         if ($this->session->data['currency'] != 'SEK') {
             $error_message = $this->language->get('error_currency');
         } else {
-            $response = $this->client->create_checkout($payload);
+            $response = $this->client->create_leasing_checkout($payload);
 
             if (!empty($response->data['invalid_properties'][0]['error_message'])) {
                 $error_message = $response->data['invalid_properties'][0]['error_message'];
@@ -120,14 +120,14 @@ class ControllerExtensionPaymentWasa extends Controller
             $data['checkout'] = $response->data;
         }
 
-        $data['test_mode'] = $this->config->get('payment_wasa_test_mode');
+        $data['test_mode'] = $this->config->get('payment_wasa_leasing_test_mode');
         $data['order_id'] = $this->session->data['order_id'];
 
-        $data['create_url'] = $this->url->link('extension/payment/wasa/create', '', true);
+        $data['create_url'] = $this->url->link('extension/payment/wasa_leasing/create', '', true);
         $data['success_url'] = $this->url->link('checkout/success', '', true);
         $data['cancel_url'] = $this->url->link('checkout/checkout', '', true);
 
-        return $this->load->view('extension/payment/wasa', $data);
+        return $this->load->view('extension/payment/wasa_leasing', $data);
     }
 
     public function create()
@@ -169,7 +169,7 @@ class ControllerExtensionPaymentWasa extends Controller
         $message = sprintf('Signering slutförd av kunden (%s)', $wasa_order_id);
 
         try {
-            $this->model_checkout_order->addOrderHistory($order_id, $this->config->get('payment_wasa_created_order_status_id'), $message, true);
+            $this->model_checkout_order->addOrderHistory($order_id, $this->config->get('payment_wasa_leasing_created_order_status_id'), $message, true);
         } catch (Exception $e) {
             if (method_exists($e, 'getMessage')) {
                 $this->log->write($e->getMessage());
@@ -207,9 +207,9 @@ class ControllerExtensionPaymentWasa extends Controller
         $wasa_order_status = $request['order_status'];
 
         $this->client = Sdk\ClientFactory::CreateClient(
-            $this->config->get('payment_wasa_client_id'),
-            $this->config->get('payment_wasa_secret_key'),
-            $this->config->get('payment_wasa_test_mode')
+            $this->config->get('payment_wasa_leasing_client_id'),
+            $this->config->get('payment_wasa_leasing_secret_key'),
+            $this->config->get('payment_wasa_leasing_test_mode')
         );
 
         $response = $this->client->get_order($wasa_order_id);
@@ -253,19 +253,19 @@ class ControllerExtensionPaymentWasa extends Controller
     {
         switch ($order_status) {
             case 'initialized':
-                return $this->config->get('payment_wasa_initialized_order_status_id');
+                return $this->config->get('payment_wasa_leasing_initialized_order_status_id');
 
             case 'pending':
-                return $this->config->get('payment_wasa_pending_order_status_id');
+                return $this->config->get('payment_wasa_leasing_pending_order_status_id');
 
             case 'ready_to_ship':
-                return $this->config->get('payment_wasa_ready_order_status_id');
+                return $this->config->get('payment_wasa_leasing_ready_order_status_id');
 
             case 'shipped':
-                return $this->config->get('payment_wasa_shipped_order_status_id');
+                return $this->config->get('payment_wasa_leasing_shipped_order_status_id');
 
             case 'canceled':
-                return $this->config->get('payment_wasa_canceled_order_status_id');
+                return $this->config->get('payment_wasa_leasing_canceled_order_status_id');
 
             default:
                 return null;

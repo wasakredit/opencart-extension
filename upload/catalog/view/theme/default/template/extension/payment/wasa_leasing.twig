@@ -1,0 +1,35 @@
+<div class="row">
+    <div class="col-md-12">
+        {% if test_mode %}
+            <div class="alert alert-success">
+                <i class="fa fa-info-circle"></i> {{ text_test_mode }}
+            </div>
+        {% endif %}
+        {% if error %}
+            <div class="alert alert-warning">
+                <i class="fa fa-check-circle"></i> {{ error }}
+            </div>
+        {% else %}
+            {{ checkout | raw }}
+            <script>
+                window.wasaCheckout.init({
+                    onComplete: function(orderReferences) {
+                        $.ajax({
+                            type: 'POST',
+                            url: '{{ create_url }}',
+                            data: {
+                                data: orderReferences,
+                            },
+                            success: function(response) {
+                                window.location.href = '{{ success_url }}';
+                            }
+                        });
+                    },
+                    onCancel: function(orderReferences) {
+                        window.location.href = '{{ cancel_url }}';
+                    }
+                });
+            </script>
+        {% endif %}
+    </div>
+</div>

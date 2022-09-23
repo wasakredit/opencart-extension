@@ -1,7 +1,7 @@
 <?php
 
 // Heading
-$_['heading_title']                  = 'Wasa Kredit';
+$_['heading_title']                  = 'Wasa Kredit - Faktura';
 
 // Tab
 $_['tab_settings']                   = 'Inställningar';
@@ -37,7 +37,7 @@ $_['help_shipped_order_status']      = 'Orderstatus som sätts när en betalning
 $_['help_canceled_status_id']        = 'Orderstatus som sätts när en betalning är annullerad.';
 
 // Logo
-$_['text_wasa']                      = '<img src="view/image/payment/wasa.png" alt="Wasa Kredit" title="Wasa Kredit" style="border: 1px solid #EEEEEE; height: 35px;" />';
+$_['text_wasa_invoice']              = '<img src="view/image/payment/wasa_invoice.png" alt="Wasa Kredit Faktura" title="Wasa Kredit Faktura" style="border: 1px solid #EEEEEE; height: 35px;" />';
 
 // Error
 $_['error_permission']               = 'Varning: Du har inte rättigheter att ändra inställningar för Wasa Kredit!';
