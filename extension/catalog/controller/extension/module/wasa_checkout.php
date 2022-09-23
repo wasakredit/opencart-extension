@@ -1,7 +1,7 @@
 <?php
 namespace Opencart\Catalog\Controller\Extension\WasaKredit\Module;
 
-class Information extends \Opencart\System\Engine\Controller
+class WasaCheckout extends \Opencart\System\Engine\Controller
 {
     private string $extension_path = 'extension/wasakredit/module/wasa_checkout';
     private string $extension_code = 'module_wasa_checkout';
