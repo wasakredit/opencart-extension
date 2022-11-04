@@ -1,4 +1,9 @@
 {
     "version": "2.0.0",
     "url": "https://raw.githubusercontent.com/wasakredit/opencart-extension/master/extension/version.json",
+    "repo": "https://github.com/wasakredit/opencart-extension/releases/latest",
+    "platform": {
+        "min": "4.0.0.0",
+        "max": "4.0.1.1"
+    }
 }

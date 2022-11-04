@@ -1,6 +1,6 @@
 {
     "name": "wasa/opencart-extension",
-    "description": "Extensions for OpenCart 4.x",
+    "description": "Payment extensions for OpenCart 4.x",
     "version": "2.0.0",
     "type": "library",
     "keywords": ["opencart", "wasa kredit", "extension"],
@@ -8,8 +8,8 @@
     "authors": [
         {
             "name": "David Villa",
-            "email": "david@kfoobar.se",
-            "homepage": "https://kfoobar.se",
+            "email": "david@foomedia.se",
+            "homepage": "https://foomedia.se",
             "role": "Developer"
         }
     ],

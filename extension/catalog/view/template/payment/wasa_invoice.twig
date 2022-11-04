@@ -1,0 +1,33 @@
+<div class="d-inline-block pt-2 pd-2 w-100 text-end" id="payment-wasa-invoice">
+    {% if test_mode %}
+        <div class="alert alert-success text-start">
+            <i class="fa fa-info-circle"></i> {{ text_test_mode }}
+        </div>
+    {% endif %}
+    {% if error %}
+        <div class="alert alert-danger text-start">
+            <i class="fa fa-circle-xmark"></i> {{ error }}
+        </div>
+    {% else %}
+        {{ checkout | raw }}
+        <script>
+            window.wasaCheckout.init({
+                onComplete: function(orderReferences) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '{{ create_url }}',
+                        data: {
+                            data: orderReferences,
+                        },
+                        success: function(response) {
+                            window.location.href = '{{ success_url }}';
+                        }
+                    });
+                },
+                onCancel: function(orderReferences) {
+                    window.location.href = '{{ cancel_url }}';
+                }
+            });
+        </script>
+    {% endif %}
+</div>

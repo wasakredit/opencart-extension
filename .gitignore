@@ -1,3 +1,2 @@
-extension/vendor/composer/*
-extension/vendor/autoload.php
+*/*.ocmod.zip
 .DS_Store
