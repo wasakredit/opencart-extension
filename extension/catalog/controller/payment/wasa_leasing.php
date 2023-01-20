@@ -10,20 +10,26 @@ class WasaLeasing extends \Opencart\System\Engine\Controller
     {
         $this->load->language($this->extension_path);
 
+        $this->load->model('localisation/country');
         $this->load->model('extension/wasa_kredit/helper/gateway');
 
         $client = $this->model_extension_wasa_kredit_helper_gateway->getClient($this->extension_code);
 
         $payment_address = !empty($this->session->data['payment_address'])
             ? $this->session->data['payment_address']
-            : $this->session->data['shipping_address'];
+            : [];
+
+        $payment_country = !empty($payment_address)
+            ? $this->model_localisation_country->getCountry($payment_address['country_id'])
+            : [];
 
         $shipping_address = !empty($this->session->data['shipping_address'])
             ? $this->session->data['shipping_address']
-            : $this->session->data['payment_address'];
+            : [];
 
-        $payment_country = $this->model_localisation_country->getCountry($payment_address['country_id']);
-        $shipping_country = $this->model_localisation_country->getCountry($shipping_address['country_id']);
+        $shipping_country = !empty($shipping_address)
+            ? $this->model_localisation_country->getCountry($shipping_address['country_id'])
+            : [];
 
         if ($this->customer->isLogged()) {
             $customer = $this->model_account_customer->getCustomer($this->customer->getId());
@@ -38,99 +44,31 @@ class WasaLeasing extends \Opencart\System\Engine\Controller
         }
 
         foreach ($this->cart->getProducts() as $product) {
-            $tax_rate = $this->tax->getTax(100, $product['tax_class_id']);
             $price_ex_vat = $product['price'];
-            $price_incl_vat = $this->tax->calculate($price_ex_vat, $product['tax_class_id'], true);
+            $vat_rate = $this->tax->getTax(100, $product['tax_class_id']);
             $vat_amount = $this->tax->getTax($price_ex_vat, $product['tax_class_id']);
-            $total_price_ex_vat = $price_ex_vat * $product['quantity'];
-            $total_price_incl_vat = $price_incl_vat * $product['quantity'];
-            $total_vat = $vat_amount * $product['quantity'];
 
             $products[] = [
                 'product_id'     => $product['product_id'],
                 'product_name'   => $product['name'],
                 'quantity'       => $product['quantity'],
-                'vat_percentage' => $tax_rate,
-                'vat_amount'     => [
-                    'amount'   => sprintf('%0.2f', $vat_amount),
-                    'currency' => $this->session->data['currency']
-                ],
+                'vat_percentage' => $vat_rate,
                 'price_ex_vat' => [
                     'amount'   => sprintf('%0.2f', $price_ex_vat),
                     'currency' => $this->session->data['currency']
                 ],
-                'price_incl_vat' => [
-                    'amount'   => sprintf('%0.2f', $price_incl_vat),
-                    'currency' => $this->session->data['currency']
-                ],
-                'total_price_ex_vat' => [
-                    'amount'   => sprintf('%0.2f', $total_price_ex_vat),
-                    'currency' => $this->session->data['currency']
-                ],
-                'total_price_incl_vat' => [
-                    'amount'   => sprintf('%0.2f', $total_price_incl_vat),
-                    'currency' => $this->session->data['currency']
-                ],
-                'total_vat' => [
-                    'amount'   => sprintf('%0.2f', $total_vat),
-                    'currency' => $this->session->data['currency']
-                ],
-            ];
-        }
-
-        if (!empty($this->session->data['shipping_method'])) {
-            $shipping = explode('.', $this->session->data['shipping_method']);
-            $shipping_method = $this->session->data['shipping_methods'][$shipping[0]]['quote'][$shipping[1]];
-
-            $tax_rate = $this->tax->getTax(100, $shipping_method['tax_class_id']);
-            $price_ex_vat = $shipping_method['cost'];
-            $price_incl_vat = $this->tax->calculate($price_ex_vat, $shipping_method['tax_class_id'], true);
-            $vat_amount = $this->tax->getTax($price_ex_vat, $shipping_method['tax_class_id']);
-            $total_price_ex_vat = $price_ex_vat * 1;
-            $total_price_incl_vat = $price_incl_vat * 1;
-            $total_vat = $vat_amount * 1;
-
-            $products[] = [
-                'product_id'     => $shipping_method['code'],
-                'product_name'   => $shipping_method['title'],
-                'quantity'       => 1,
-                'vat_percentage' => $tax_rate,
-                'vat_amount'     => [
+                'vat_amount' => [
                     'amount'   => sprintf('%0.2f', $vat_amount),
                     'currency' => $this->session->data['currency']
-                ],
-                'price_ex_vat' => [
-                    'amount'   => sprintf('%0.2f', $price_ex_vat),
-                    'currency' => $this->session->data['currency']
-                ],
-                'price_incl_vat' => [
-                    'amount'   => sprintf('%0.2f', $price_incl_vat),
-                    'currency' => $this->session->data['currency']
-                ],
-                'total_price_ex_vat' => [
-                    'amount'   => sprintf('%0.2f', $total_price_ex_vat),
-                    'currency' => $this->session->data['currency']
-                ],
-                'total_price_incl_vat' => [
-                    'amount'   => sprintf('%0.2f', $total_price_incl_vat),
-                    'currency' => $this->session->data['currency']
-                ],
-                'total_vat' => [
-                    'amount'   => sprintf('%0.2f', $total_vat),
-                    'currency' => $this->session->data['currency']
-                ],
+                ]
             ];
         }
 
-        $total_price_incl_vat = 0;
-        $total_price_ex_vat = 0;
-        $total_vat = 0;
+        $shipping_cost = !empty($this->session->data['shipping_method']['cost'])
+            ? $this->session->data['shipping_method']['cost']
+            : 0;
 
-        foreach ($products as $product) {
-            $total_price_incl_vat += $product['total_price_incl_vat']['amount'];
-            $total_price_ex_vat += $product['total_price_ex_vat']['amount'];
-            $total_vat += $product['total_vat']['amount'];
-        }
+        $shipping_cost = $this->currency->format($shipping_cost, $this->session->data['currency'], false, false);
 
         $payload = [
             'order_references' => [
@@ -139,30 +77,32 @@ class WasaLeasing extends \Opencart\System\Engine\Controller
                     'value' => $this->session->data['order_id'],
                 ],
             ],
-            'cart_items' => $products ?? [],
-            'total_price_incl_vat' => [
-                'amount'   => sprintf('%0.2f', $total_price_incl_vat),
+            'delivery_address' => [
+                'company_name'   => $shipping_address['company'] ?? null,
+                'street_address' => $shipping_address['address_1'] ?? null,
+                'postal_code'    => $shipping_address['postcode'] ?? null,
+                'city'           => $shipping_address['city'] ?? null,
+                'country'        => $shipping_country['name'] ?? null,
+            ],
+            'billing_address' => [
+                'company_name'   => $payment_address['company'] ?? null,
+                'street_address' => $payment_address['address_1'] ?? null,
+                'postal_code'    => $payment_address['postcode'] ?? null,
+                'city'           => $payment_address['city'] ?? null,
+                'country'        => $payment_country['name'] ?? null,
+            ],
+            'shipping_cost_ex_vat' => [
+                'amount'   => $shipping_cost,
                 'currency' => $this->session->data['currency'],
             ],
-            'total_price_ex_vat' => [
-                'amount'   => sprintf('%0.2f', $total_price_ex_vat),
-                'currency' => $this->session->data['currency'],
-            ],
-            'total_vat' => [
-                'amount'   => sprintf('%0.2f', $total_vat),
-                'currency' => $this->session->data['currency'],
-            ],
-            'billing_details' => [
-                'billing_reference' => null,
-                'billing_tag'       => null,
-            ],
+            'cart_items'                   => $products ?? [],
             'customer_organization_number' => '',
             'purchaser_name'               => $name,
             'purchaser_email'              => $email,
             'purchaser_phone'              => $phone,
-            'partner_reference'            => null,
             'recipient_name'               => $name,
             'recipient_phone'              => $phone,
+            'payment_types'                => 'leasing',
             'request_domain'               => $this->config->get('config_ssl'),
             'confirmation_callback_url'    => $this->url->link('checkout/success', '', true),
             'ping_url'                     => $this->url->link('extension/wasa_kredit/payment/wasa_leasing/callback', '', true),
