@@ -13,6 +13,13 @@
         <script>
             window.wasaCheckout.init({
                 onComplete: function(orderReferences) {
+                    if (orderReferences.length === 1) {
+                        orderReferences.push( {
+                            key: 'partner_order_number',
+                            value: '{{ order_id }}',
+                        });
+                    }
+
                     $.ajax({
                         type: 'POST',
                         url: '{{ create_url }}',
@@ -20,7 +27,12 @@
                             data: orderReferences,
                         },
                         success: function(response) {
-                            window.location.href = '{{ success_url }}';
+                            if (response.success === true) {
+                                window.location.href = '{{ success_url }}';
+                            }
+                        },
+                        error: function(response) {
+                            window.location.href = '{{ error_url }}';
                         }
                     });
                 },

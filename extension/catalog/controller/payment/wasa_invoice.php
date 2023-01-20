@@ -123,7 +123,7 @@ class WasaInvoice extends \Opencart\System\Engine\Controller
             'order_references' => [
                 [
                     'key'   => 'partner_order_number',
-                    'value' => $this->session->data['order_id'],
+                    'value' => (string) $this->session->data['order_id'],
                 ],
             ],
             'cart_items' => $products ?? [],
@@ -178,6 +178,7 @@ class WasaInvoice extends \Opencart\System\Engine\Controller
 
         $data['create_url'] = $this->url->link('extension/wasa_kredit/payment/wasa_invoice|confirm', '', true);
         $data['success_url'] = $this->url->link('checkout/success', '', true);
+        $data['error_url'] = $this->url->link('checkout/failure', '', true);
         $data['cancel_url'] = $this->url->link('checkout/checkout', '', true);
 
         $data['language'] = $this->config->get('config_language');
@@ -190,11 +191,9 @@ class WasaInvoice extends \Opencart\System\Engine\Controller
         $this->load->language($this->extension_path);
 
         if ($this->request->server['REQUEST_METHOD'] != 'POST') {
-            $this->response->addHeader('HTTP/1.0 405 Method Not Allowed');
-            exit('Method not allowed');
+            $this->error('HTTP/1.0 405 Method Not Allowed', 'Method not allowed');
         } elseif (empty($this->request->post['data'])) {
-            $this->response->addHeader('HTTP/1.1 400 Bad Request');
-            exit('Payload is empty');
+            $this->error('HTTP/1.1 400 Bad Request', 'Payload is empty');
         }
 
         foreach ($this->request->post['data'] as $property) {
@@ -210,8 +209,7 @@ class WasaInvoice extends \Opencart\System\Engine\Controller
         }
 
         if (empty($wasa_order_id) || empty($order_id)) {
-            $this->response->addHeader('HTTP/1.1 400 Bad Request');
-            exit('References is empty');
+            $this->error('HTTP/1.1 400 Bad Request', 'References is empty');
         }
 
         $this->load->model('checkout/order');
@@ -219,8 +217,7 @@ class WasaInvoice extends \Opencart\System\Engine\Controller
         $order = $this->model_checkout_order->getOrder($order_id);
 
         if ($order['order_status_id'] > 0) {
-            $this->response->addHeader('Content-Type: application/json');
-            $this->response->setOutput(null);
+            $this->success(null);
         }
 
         $order_status = $this->config->get($this->extension_code . '_default_order_status_id');
@@ -229,15 +226,12 @@ class WasaInvoice extends \Opencart\System\Engine\Controller
         try {
             $this->model_checkout_order->addHistory($order_id, $order_status, $message, true);
         } catch (Exception $e) {
-            $this->log->write(
-                method_exists($e, 'getMessage')
-                    ? $e->getMessage()
-                    : 'Unknown error while adding order history'
-            );
+            if (method_exists($e, 'getMessage')) {
+                $this->log->write($e->getMessage());
+            }
         }
 
-        $this->response->addHeader('Content-Type: application/json');
-        $this->response->setOutput(null);
+        $this->success(null);
     }
 
     public function callback()
@@ -249,20 +243,15 @@ class WasaInvoice extends \Opencart\System\Engine\Controller
             : $this->request->post;
 
         if ($this->request->server['REQUEST_METHOD'] != 'POST') {
-            $this->response->addHeader('HTTP/1.0 405 Method Not Allowed');
-            exit('Method not allowed');
+            $this->error('HTTP/1.0 405 Method Not Allowed', 'Method not allowed');
         } elseif (empty($request['order_id'])) {
-            $this->response->addHeader('HTTP/1.1 400 Bad Request');
-            exit('Order id is empty');
+            $this->error('HTTP/1.1 400 Bad Request', 'Order id is empty');
         } elseif (empty($request['order_status'])) {
-            $this->response->addHeader('HTTP/1.1 400 Bad Request');
-            exit('Order status is empty');
+            $this->error('HTTP/1.1 400 Bad Request', 'Order status is empty');
         } elseif ($request['order_status'] === 'initialized') {
-            $this->response->addHeader('Content-Type: application/json');
-            exit(null);
+            $this->success(null);
         } elseif ($request['order_status'] === 'pending') {
-            $this->response->addHeader('Content-Type: application/json');
-            exit(null);
+            $this->success(null);
         }
 
         $wasa_order_id = $request['order_id'];
@@ -287,8 +276,7 @@ class WasaInvoice extends \Opencart\System\Engine\Controller
         }
 
         if (empty($wasa_order_id) || empty($order_id)) {
-            $this->response->addHeader('HTTP/1.1 400 Bad Request');
-            exit('References is empty');
+            $this->error('HTTP/1.1 400 Bad Request', 'References is empty');
         }
 
         $this->load->model('checkout/order');
@@ -307,8 +295,7 @@ class WasaInvoice extends \Opencart\System\Engine\Controller
             }
         }
 
-        $this->response->addHeader('Content-Type: application/json');
-        $this->response->setOutput(null);
+        $this->success(null);
     }
 
     private function getOrderStatus(string $order_status)
@@ -332,5 +319,26 @@ class WasaInvoice extends \Opencart\System\Engine\Controller
             default:
                 return null;
         }
+    }
+
+    private function success(string $message = null): void
+    {
+        $json = json_encode([
+            'success' => true,
+            'message' => $message,
+        ]);
+
+        $this->response->addHeader('Content-Type: application/json');
+        $this->response->setOutput($json);
+        $this->response->output();
+        die();
+    }
+
+    private function error(string $header, string $message = null): void
+    {
+        $this->response->addHeader($header);
+        $this->response->setOutput($message);
+        $this->response->output();
+        die();
     }
 }
