@@ -30,9 +30,9 @@
                     {{ text_edit }}
                 </div>
                 <div class="flex-shrink-1">
-                    {% if payment_wasa_invoice_status == 0 %}
+                    {% if payment_wasa_leasing_status == 0 %}
                         <span class="badge rounded-pill bg-secondary">{{ text_is_disabled }}</span>
-                    {% elseif payment_wasa_invoice_test_mode %}
+                    {% elseif payment_wasa_leasing_test_mode %}
                         <span class="badge rounded-pill bg-success">{{ text_in_test_mode }}</span>
                     {% else %}
                         <span class="badge rounded-pill bg-danger">{{ text_in_live_mode }}</span>

@@ -171,7 +171,7 @@ class WasaLeasing extends \Opencart\System\Engine\Controller
         if ($this->session->data['currency'] != 'SEK') {
             $error_message = $this->language->get('error_currency');
         } else {
-            $response = $client->create_invoice_checkout($payload);
+            $response = $client->create_leasing_checkout($payload);
 
             if (empty($response)) {
                 $error_message = $this->language->get('error_client');
@@ -189,7 +189,7 @@ class WasaLeasing extends \Opencart\System\Engine\Controller
         $data['test_mode'] = $this->config->get($this->extension_code . '_test_mode');
         $data['order_id'] = $this->session->data['order_id'];
 
-        $data['create_url'] = $this->url->link('extension/wasa_kredit/payment/wasa_invoice|confirm', '', true);
+        $data['create_url'] = $this->url->link('extension/wasa_kredit/payment/wasa_leasing|confirm', '', true);
         $data['success_url'] = $this->url->link('checkout/success', '', true);
         $data['cancel_url'] = $this->url->link('checkout/checkout', '', true);
 
