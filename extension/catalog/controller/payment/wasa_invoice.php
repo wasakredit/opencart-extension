@@ -10,17 +10,14 @@ class WasaInvoice extends \Opencart\System\Engine\Controller
     {
         $this->load->language($this->extension_path);
 
-        $this->load->model('account/customer');
         $this->load->model('extension/wasa_kredit/helper/gateway');
 
         $client = $this->model_extension_wasa_kredit_helper_gateway->getClient($this->extension_code);
 
         if ($this->customer->isLogged()) {
-            $customer = $this->model_account_customer->getCustomer($this->customer->getId());
-
-            $name = sprintf('%s %s', $customer['firstname'], $customer['lastname']);
-            $email = $customer['email'];
-            $phone = $customer['telephone'];
+            $name = sprintf('%s %s', $this->customer->getFirstName(), $this->customer->getLastName());
+            $email = $this->customer->getEmail();
+            $phone = $this->customer->getTelephone();
         } elseif (isset($this->session->data['customer'])) {
             $name = sprintf('%s %s', $this->session->data['customer']['firstname'], $this->session->data['customer']['lastname']);
             $email = $this->session->data['customer']['email'];
