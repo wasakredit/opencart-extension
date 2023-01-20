@@ -11,21 +11,9 @@ class WasaInvoice extends \Opencart\System\Engine\Controller
         $this->load->language($this->extension_path);
 
         $this->load->model('account/customer');
-        $this->load->model('localisation/country');
         $this->load->model('extension/wasa_kredit/helper/gateway');
 
         $client = $this->model_extension_wasa_kredit_helper_gateway->getClient($this->extension_code);
-
-        $payment_address = !empty($this->session->data['payment_address'])
-            ? $this->session->data['payment_address']
-            : $this->session->data['shipping_address'];
-
-        $shipping_address = !empty($this->session->data['shipping_address'])
-            ? $this->session->data['shipping_address']
-            : $this->session->data['payment_address'];
-
-        $payment_country = $this->model_localisation_country->getCountry($payment_address['country_id']);
-        $shipping_country = $this->model_localisation_country->getCountry($shipping_address['country_id']);
 
         if ($this->customer->isLogged()) {
             $customer = $this->model_account_customer->getCustomer($this->customer->getId());
