@@ -1,4 +1,5 @@
 <?php
+
 namespace Opencart\Catalog\Controller\Extension\WasaKredit\Payment;
 
 class WasaLeasing extends \Opencart\System\Engine\Controller
@@ -236,7 +237,7 @@ class WasaLeasing extends \Opencart\System\Engine\Controller
         $order_status = $this->getOrderStatus($wasa_order_status);
 
         if (!empty($order_status)) {
-            $message = sprintf('Avtalet godkänt as Wasa (%s)', $wasa_order_id);
+            $message = sprintf('Avtalet godkänt av Wasa (%s)', $wasa_order_id);
 
             try {
                 $this->model_checkout_order->addOrderHistory($order_id, $order_status, $message, false);
