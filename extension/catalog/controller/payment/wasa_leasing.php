@@ -165,6 +165,9 @@ class WasaLeasing extends \Opencart\System\Engine\Controller
         }
 
         $this->load->model('checkout/order');
+        $this->load->model('extension/wasa_kredit/helper/order');
+
+        $this->model_extension_wasa_kredit_helper_order->addWasaOrderId($order_id, $wasa_order_id);
 
         $order = $this->model_checkout_order->getOrder($order_id);
 
@@ -210,7 +213,7 @@ class WasaLeasing extends \Opencart\System\Engine\Controller
         $wasa_order_id = $request['order_id'];
         $wasa_order_status = $request['order_status'];
 
-        if (!in_array($wasa_order_status, ['initialized', 'pending'])) {
+        if (!in_array($wasa_order_status, ['ready_to_ship'])) {
             $this->success(null);
         }
 
@@ -237,6 +240,9 @@ class WasaLeasing extends \Opencart\System\Engine\Controller
         }
 
         $this->load->model('checkout/order');
+        $this->load->model('extension/wasa_kredit/helper/order');
+
+        $this->model_extension_wasa_kredit_helper_order->addWasaOrderId($order_id, $wasa_order_id);
 
         $order_status = $this->config->get($this->extension_code . '_default_order_status_id');
 
