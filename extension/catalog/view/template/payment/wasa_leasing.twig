@@ -1,12 +1,12 @@
 <div class="d-inline-block pt-2 pd-2 w-100 text-end" id="payment-wasa-leasing">
     {% if test_mode %}
-        <div class="alert alert-success">
+        <div class="alert alert-success text-start">
             <i class="fa fa-info-circle"></i> {{ text_test_mode }}
         </div>
     {% endif %}
     {% if error %}
-        <div class="alert alert-warning">
-            <i class="fa fa-check-circle"></i> {{ error }}
+        <div class="alert alert-danger text-start">
+            <i class="fa fa-circle-xmark"></i> {{ error }}
         </div>
     {% else %}
         {{ checkout | raw }}
