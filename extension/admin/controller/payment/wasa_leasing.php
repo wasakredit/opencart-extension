@@ -95,15 +95,28 @@ class WasaLeasing extends \Opencart\System\Engine\Controller
 
     public function install(): void
     {
-        if ($this->user->hasPermission('modify', 'extension/payment')) {
-            //
-        }
+        $this->load->model('setting/event');
+        $this->load->model('extension/wasa_kredit/payment/wasa_leasing');
+
+        $this->model_extension_wasa_kredit_payment_wasa_leasing->install();
+
+        $this->model_setting_event->addEvent([
+            'code'        => 'wasa_leasing_sync',
+            'description' => '',
+            'trigger'     => 'catalog/model/checkout/order/addHistory/after',
+            'action'      => 'extension/wasa_kredit/event/wasa_leasing.syncAfter',
+            'status'      => 1,
+            'sort_order'  => 0,
+        ]);
     }
 
     public function uninstall(): void
     {
-        if ($this->user->hasPermission('modify', 'extension/payment')) {
-            //
-        }
+        $this->load->model('setting/event');
+        $this->load->model('extension/wasa_kredit/payment/wasa_leasing');
+
+        $this->model_extension_wasa_kredit_payment_wasa_leasing->uninstall();
+
+        $this->model_setting_event->deleteEventByCode('wasa_leasing_sync');
     }
 }

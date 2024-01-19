@@ -95,15 +95,28 @@ class WasaInvoice extends \Opencart\System\Engine\Controller
 
     public function install(): void
     {
-        if ($this->user->hasPermission('modify', 'extension/payment')) {
-            //
-        }
+        $this->load->model('setting/event');
+        $this->load->model('extension/wasa_kredit/payment/wasa_invoice');
+
+        $this->model_extension_wasa_kredit_payment_wasa_invoice->install();
+
+        $this->model_setting_event->addEvent([
+            'code'        => 'wasa_invoice_sync',
+            'description' => '',
+            'trigger'     => 'catalog/model/checkout/order/addHistory/after',
+            'action'      => 'extension/wasa_kredit/event/wasa_invoice.syncAfter',
+            'status'      => 1,
+            'sort_order'  => 0,
+        ]);
     }
 
     public function uninstall(): void
     {
-        if ($this->user->hasPermission('modify', 'extension/payment')) {
-            //
-        }
+        $this->load->model('setting/event');
+        $this->load->model('extension/wasa_kredit/payment/wasa_invoice');
+
+        $this->model_extension_wasa_kredit_payment_wasa_invoice->uninstall();
+
+        $this->model_setting_event->deleteEventByCode('wasa_invoice_sync');
     }
 }
