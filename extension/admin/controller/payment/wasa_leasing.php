@@ -1,4 +1,5 @@
 <?php
+
 namespace Opencart\Admin\Controller\Extension\WasaKredit\Payment;
 
 class WasaLeasing extends \Opencart\System\Engine\Controller
@@ -44,17 +45,17 @@ class WasaLeasing extends \Opencart\System\Engine\Controller
         $data['opencart_version'] = $this->model_extension_wasa_kredit_helper_system->getOpenCartVersion();
 
         $settings = [
-            'client_id'                 => null,
-            'secret_key'                => null,
-            'test_mode'                 => true,
-            'test_mode_client_id'       => null,
-            'test_mode_secret_key'      => null,
-            'default_order_status_id'   => 2,
-            'confirmed_order_status_id' => null,
-            'cancelled_order_status_id' => null,
-            'geo_zone_id'               => null,
-            'status'                    => false,
-            'sort_order'                => 1,
+            'client_id'               => null,
+            'secret_key'              => null,
+            'test_mode'               => true,
+            'test_mode_client_id'     => null,
+            'test_mode_secret_key'    => null,
+            'default_order_status_id' => 2,
+            'complete_order_status'   => [],
+            'cancel_order_status'     => [],
+            'geo_zone_id'             => null,
+            'status'                  => false,
+            'sort_order'              => 1,
         ];
 
         foreach ($settings as $key => $value) {

@@ -210,6 +210,10 @@ class WasaLeasing extends \Opencart\System\Engine\Controller
         $wasa_order_id = $request['order_id'];
         $wasa_order_status = $request['order_status'];
 
+        if (!in_array($wasa_order_status, ['initialized', 'pending'])) {
+            $this->success(null);
+        }
+
         $this->load->model('extension/wasa_kredit/helper/gateway');
 
         $client = $this->model_extension_wasa_kredit_helper_gateway->getClient($this->extension_code);
@@ -234,7 +238,7 @@ class WasaLeasing extends \Opencart\System\Engine\Controller
 
         $this->load->model('checkout/order');
 
-        $order_status = $this->getOrderStatus($wasa_order_status);
+        $order_status = $this->config->get($this->extension_code . '_default_order_status_id');
 
         if (!empty($order_status)) {
             $message = sprintf('Avtalet godkänt av Wasa (%s)', $wasa_order_id);
@@ -249,29 +253,6 @@ class WasaLeasing extends \Opencart\System\Engine\Controller
         }
 
         $this->success(null);
-    }
-
-    private function getOrderStatus(string $order_status)
-    {
-        switch ($order_status) {
-            case 'initialized':
-            case 'pending':
-                return $this->config->get($this->extension_code . '_default_order_status_id');
-
-            case 'ready_to_ship':
-            case 'shipped':
-                return !empty($this->config->get($this->extension_code . '_confirmed_order_status_id'))
-                    ? $this->config->get($this->extension_code . '_confirmed_order_status_id')
-                    : null;
-
-            case 'canceled':
-                return !empty($this->config->get($this->extension_code . '_cancelled_order_status_id'))
-                    ? $this->config->get($this->extension_code . '_cancelled_order_status_id')
-                    : null;
-
-            default:
-                return null;
-        }
     }
 
     private function success(string $message = null): void

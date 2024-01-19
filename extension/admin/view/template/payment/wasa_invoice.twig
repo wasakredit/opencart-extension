@@ -99,37 +99,41 @@
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <label for="input-confirmed-order-status" class="col-sm-2 col-form-label">
-                                    {{ entry_confirmed_order_status }}
+                                <label class="col-sm-2 col-form-label">
+                                    {{ entry_complete_order_status }}
                                 </label>
                                 <div class="col-sm-10">
-                                    <select name="payment_wasa_invoice_confirmed_order_status_id" id="input-confirmed-order-status" class="form-select">
-                                        <option value="" {% if payment_wasa_invoice_confirmed_order_status_id == null %}selected="selected"{% endif %}>
-                                            -- None, ignore payment updates --
-                                        </option>
+                                    <div id="complete-order-status" class="form-control" style="height: 150px; overflow: auto;">
                                         {% for order_status in order_statuses %}
-                                            <option value="{{ order_status.order_status_id }}" {% if order_status.order_status_id == payment_wasa_invoice_confirmed_order_status_id %}selected="selected"{% endif %}>
-                                                {{ order_status.name }}
-                                            </option>
+                                            <div class="form-check">
+                                                <input type="checkbox" name="payment_wasa_leasing_complete_order_status[]" value="{{ order_status.order_status_id }}" id="complete-order-status-{{ order_status.order_status_id }}" class="form-check-input" {% if order_status.order_status_id in payment_wasa_leasing_complete_order_status %}checked{% endif %}/>
+                                                <label for="complete-order-status-{{ order_status.order_status_id }}" class="form-check-label">
+                                                    {{ order_status.name }}
+                                                </label>
+                                            </div>
                                         {% endfor %}
-                                    </select>
+                                    </div>
+                                    <div class="form-text">{{ help_complete_order_status }}</div>
+                                    <div id="error-complete-order-status" class="invalid-feedback"></div>
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <label for="input-cancelled-order-status" class="col-sm-2 col-form-label">
-                                    {{ entry_cancelled_order_status }}
+                                <label class="col-sm-2 col-form-label">
+                                    {{ entry_cancel_order_status }}
                                 </label>
                                 <div class="col-sm-10">
-                                    <select name="payment_wasa_invoice_cancelled_order_status_id" id="input-cancelled-order-status" class="form-select">
-                                        <option value="" {% if payment_wasa_invoice_cancelled_order_status_id == null %}selected="selected"{% endif %}>
-                                            -- None, ignore payment updates --
-                                        </option>
+                                    <div id="input-cancel-order-status" class="form-control" style="height: 150px; overflow: auto;">
                                         {% for order_status in order_statuses %}
-                                            <option value="{{ order_status.order_status_id }}" {% if order_status.order_status_id == payment_wasa_invoice_cancelled_order_status_id %}selected="selected"{% endif %}>
-                                                {{ order_status.name }}
-                                            </option>
+                                            <div class="form-check">
+                                                <input type="checkbox" name="payment_wasa_leasing_cancel_order_status[]" value="{{ order_status.order_status_id }}" id="input-cancel-order-status-{{ order_status.order_status_id }}" class="form-check-input"{% if order_status.order_status_id in payment_wasa_leasing_cancel_order_status %} checked{% endif %}/>
+                                                <label for="input-cancel-order-status-{{ order_status.order_status_id }}" class="form-check-label">
+                                                    {{ order_status.name }}
+                                                </label>
+                                            </div>
                                         {% endfor %}
-                                    </select>
+                                    </div>
+                                    <div class="form-text">{{ help_cancel_order_status }}</div>
+                                    <div id="error-cancel-order-status" class="invalid-feedback"></div>
                                 </div>
                             </div>
                             <div class="row mb-3">

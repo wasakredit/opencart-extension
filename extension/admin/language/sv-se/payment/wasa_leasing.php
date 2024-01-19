@@ -23,8 +23,8 @@ $_['text_wasa_leasing']            = '<img src="/extension/wasa_kredit/admin/vie
 $_['entry_client_id']              = 'Client ID';
 $_['entry_secret_key']             = 'Secret Key';
 $_['entry_default_order_status']   = 'Order Status (default)';
-$_['entry_confirmed_order_status'] = 'Order Status (confirmed)';
-$_['entry_cancelled_order_status'] = 'Order Status (cancelled)';
+$_['entry_complete_order_status'] = 'Complete Order Status';
+$_['entry_cancel_order_status']   = 'Cancel Order Status';
 $_['entry_order_status']           = 'Order Status';
 $_['entry_geo_zone']               = 'Geo Zone';
 $_['entry_status']                 = 'Status';
@@ -34,6 +34,10 @@ $_['entry_current_version']        = 'Current Version';
 $_['entry_latest_version']         = 'Latest Version';
 $_['entry_opencart_version']       = 'OpenCart Version';
 $_['entry_support']                = 'Support';
+
+// Help
+$_['help_complete_order_status']  = 'Set the order status the order must reach before the order/payment marked as shipped.';
+$_['help_cancel_order_status']    = 'Set the order status the order must reach before the order/payment marked as cancelled';
 
 // Error
 $_['error_permission']             = 'Warning: You do not have permission to modify payment Wasa Kredit Leasing!';
