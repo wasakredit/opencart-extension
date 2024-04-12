@@ -20,6 +20,7 @@ $_['entry_test_mode']                = 'Testläge';
 $_['entry_status']                   = 'Status';
 
 $_['entry_show_widget']              = 'Visa widget';
+$_['entry_widget_size']              = 'Storlek';
 
 $_['entry_created_order_status']     = 'Skapad';
 $_['entry_initialized_order_status'] = 'Initialized';

@@ -4,16 +4,28 @@ require_once(DIR_SYSTEM . 'library/wasa/wasa/client-php-sdk/Wasa.php');
 
 class ModelExtensionModuleWasaWidget extends Model
 {
-    public function getWidget($product, $format = 'small')
+    public function getWidget($product, $format = 'small-no-icon')
     {
-        if (!$this->config->get('payment_wasa_leasing_show_widget')) {
+        if (!$this->config->get('payment_wasa_leasing_show_widget') && !$this->config->get('payment_wasa_invoice_show_widget')) {
             return;
         }
 
+        if ($this->config->get('payment_wasa_leasing_show_widget') && $this->config->get('payment_wasa_leasing_status')) {
+            $extension = 'payment_wasa_leasing';
+        } elseif ($this->config->get('payment_wasa_invoice_show_widget') && $this->config->get('payment_wasa_invoice_status')) {
+            $extension = 'payment_wasa_invoice';
+        } else {
+            return;
+        }
+
+        $format = !empty($this->config->get($extension . '_widget_size'))
+            ? $this->config->get($extension . '_widget_size')
+            : $format;
+
         $this->client = Sdk\ClientFactory::CreateClient(
-            $this->config->get('payment_wasa_leasing_client_id'),
-            $this->config->get('payment_wasa_leasing_secret_key'),
-            $this->config->get('payment_wasa_leasing_test_mode')
+            $this->config->get($extension . '_client_id'),
+            $this->config->get($extension . '_secret_key'),
+            $this->config->get($extension . '_test_mode')
         );
 
         $price = !empty($product['special'])

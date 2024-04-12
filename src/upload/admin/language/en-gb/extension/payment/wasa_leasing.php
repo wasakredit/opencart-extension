@@ -20,6 +20,7 @@ $_['entry_test_mode']                = 'Test Mode';
 $_['entry_status']                   = 'Status';
 
 $_['entry_show_widget']              = 'Show Widget';
+$_['entry_widget_size']              = 'Widget Size';
 
 $_['entry_created_order_status']     = 'Created';
 $_['entry_initialized_order_status'] = 'Initialized';

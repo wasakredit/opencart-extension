@@ -83,6 +83,14 @@ class ControllerExtensionPaymentWasaLeasing extends Controller
             $data['payment_wasa_leasing_show_widget'] = 0;
         }
 
+        if (isset($this->request->post['payment_wasa_leasing_widget_size'])) {
+            $data['payment_wasa_leasing_widget_size'] = $this->request->post['payment_wasa_leasing_widget_size'];
+        } elseif ($this->config->has('payment_wasa_leasing_widget_size')) {
+            $data['payment_wasa_leasing_widget_size'] = $this->config->get('payment_wasa_leasing_widget_size');
+        } else {
+            $data['payment_wasa_leasing_widget_size'] = 'small';
+        }
+
         $order_statuses = [
             'payment_wasa_leasing_created_order_status_id',
             'payment_wasa_leasing_initialized_order_status_id',
@@ -90,6 +98,11 @@ class ControllerExtensionPaymentWasaLeasing extends Controller
             'payment_wasa_leasing_pending_order_status_id',
             'payment_wasa_leasing_ready_order_status_id',
             'payment_wasa_leasing_shipped_order_status_id',
+        ];
+
+        $data['widget_sizes'] = [
+            'small-no-icon' => 'Small',
+            'large-no-icon' => 'Large',
         ];
 
         foreach ($order_statuses as $order_status) {
