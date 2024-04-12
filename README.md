@@ -1,5 +1,5 @@
 # Wasa Kredit for OpenCart v3.0+
-This is a payment extension for OpenCart 3.0.0.0 - 3.0.3.8.
+This is a payment extension for OpenCart 3.0.0.0 - 3.0.3.9.
 
 This extension allows you to receive payments from your customers through:
 
@@ -42,7 +42,7 @@ before atemptning the upgrade to avoid any issues caused by the breaking changes
 ## Requirements
 
 This is the requirements to run this module:
-- OpenCart 3.0.0.0 or later
+- OpenCart 3.0.3.0 or later
 - PHP 7.3 or later
 - A valid, approved Wasa Kredit merchant account
 
