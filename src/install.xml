@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <modification>
     <name>Wasa Kredit - Payment extension</name>
-    <version>1.4.1</version>
+    <version>1.4.2</version>
     <author>David Villa</author>
     <link>https://wasakredit.se/</link>
     <code>wasa_payment_extension</code>
